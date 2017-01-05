@@ -18,14 +18,16 @@ class YktManager {
     return new Promise((resolve, reject) => {
       const queryShopBillSqlBuild = util.format(this.queryShopBillSql, shopId, accDate);
       console.info(`getShopBill: Executing ${queryShopBillSqlBuild}`);
-      this.connection.query(queryShopBillSqlBuild, function(err, rows) {
+      this.connection.query(queryShopBillSqlBuild, (err, rows) => {
         if(err) {
           console.error(`Error executing ${queryShopBillSqlBuild}, with error ${err.stack}`);
           reject(err);
+          return;
         }
         if(rows.length == 0) {
           console.warn(`Executing ${queryShopBillSqlBuild} return empty result`);
           resolve(null);
+          return;
         }
         const shopBill = {
           shopId: shopId,
@@ -43,14 +45,16 @@ class YktManager {
     return new Promise((resolve, reject) => {
       const queryDeviceBillSqlBuild = util.format(this.queryDeviceBillSql, deviceId, accDate);
       console.info(`getDeviceBill: Executing ${queryDeviceBillSqlBuild}`);
-      this.connection.query(queryDeviceBillSqlBuild, function(err, rows) {
+      this.connection.query(queryDeviceBillSqlBuild, (err, rows) => {
         if(err) {
           console.error(`Error executing ${queryDeviceBillSqlBuild}, with error ${err.stack}`);
           reject(err);
+          return;
         }
         if(rows.length == 0) {
           console.warn(`Executing ${queryDeviceBillSqlBuild} return empty result`);
           resolve(null);
+          return;
         }
         const deviceBill = {
           deviceId: deviceId,
@@ -71,10 +75,16 @@ class YktManager {
     return new Promise((resolve, reject) => {
       const querySql = shopId ? util.format(this.queryDevicesByShopIdSql, shopId) : this.queryDevicesSql;
       console.info(`getDevices: Executing ${querySql}`);
-      this.connection.query(querySql, function(err, rows) {
+      this.connection.query(querySql, (err, rows) => {
         if(err) {
           console.error(`Error executing ${querySql}, with error ${err.stack}`);
           reject(err);
+          return;
+        }
+        if(rows.length == 0) {
+          console.warn(`Executing ${querySql} return empty result`);
+          resolve(null);
+          return;
         }
         const devices = rows.map(row => {
           return {deviceId: row.deviceId, deviceName: row.deviceName};
@@ -86,10 +96,16 @@ class YktManager {
   getShops() {
     return new Promise((resolve, reject) => {
       console.info(`getShops: Executing ${this.queryShopsSql}`);
-      this.connection.query(this.queryShopsSql, function(err, rows) {
+      this.connection.query(this.queryShopsSql, (err, rows) => {
         if(err) {
           console.error(`Error executing ${this.queryShopsSql}, with error ${err.stack}`);
           reject(err);
+          return;
+        }
+        if(rows.length == 0) {
+          console.warn(`Executing ${queryShopsSql} return empty result`);
+          resolve(null);
+          return;
         }
         const shops = rows.map(row => {
           return {shopId: row.shopId, shopName: row.shopName};
