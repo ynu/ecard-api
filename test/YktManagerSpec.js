@@ -16,15 +16,15 @@ describe('YktManager', () => {
 
     const yktManager = new YktManager({url: process.env.DATABASE_URL});
 
-    it('should return a list of shopBills in js object data structure', () => {
-      return yktManager.getShopBill(110, "20170102").then(function(data) {
+    it('should return a single shopBill in js object data structure', () => {
+      return yktManager.getShopBill("110", "20170108").then(function(data) {
         console.info(data);
         expect(data).to.be.ok;
       });
     });
 
-    it('should return a list of deviceBills in js object data structure', () => {
-      return yktManager.getDeviceBill(50040223, "20170102").then(function(data) {
+    it('should return a single deviceBill in js object data structure', () => {
+      return yktManager.getDeviceBill("50040223", "20170105").then(function(data) {
         console.info(data);
         expect(data).to.be.ok;
       });
@@ -41,6 +41,21 @@ describe('YktManager', () => {
       return yktManager.getShops().then(function(data) {
         console.info(data);
         expect(data.length).to.be.equal(150);
+      });
+    });
+
+
+    it('should return a list of shopBill in js object data structure', () => {
+      return yktManager.getShopBills("196", "20170108").then(function(data) {
+        console.info(data);
+        expect(data.length).to.be.greaterThan(0);
+      });
+    });
+
+    it('should return a list of deviceBill in js object data structure', () => {
+      return yktManager.getDeviceBills("110", "20170105").then(function(data) {
+        console.info(data);
+        expect(data.length).to.be.greaterThan(0);
       });
     });
 
