@@ -214,6 +214,24 @@ class YktManager {
       });
     });
   }
+
+  /*
+    获取指定商户的所有祖先商户节点
+   */
+  async getAncestorShops(shop) {
+    const shops = await this.getShops();
+    const getAncestors = shop2 => {
+      // “0”是根节点的父节点
+      if (shop2.fShopId === '0') return [];
+      // 当前节点的父节点
+      const father = shops.find(s => s.shopId === shop2.fShopId);
+      return [
+        ...getAncestors(father),
+        father,
+      ];
+    };
+    return getAncestors(shop);
+  }
 }
 
 export default YktManager;
