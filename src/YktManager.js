@@ -25,15 +25,15 @@ class YktManager {
   getShopBill(shopId, accDate) {
     return new Promise((resolve, reject) => {
       const queryShopBillSqlBuild = util.format(this.queryShopBillSql, this.connection.escape(shopId), this.connection.escape(accDate));
-      console.info(`getShopBill: Executing ${queryShopBillSqlBuild}\n`);
+      info(`getShopBill: Executing ${queryShopBillSqlBuild}\n`);
       this.connection.query(queryShopBillSqlBuild, (err, rows) => {
         if (err) {
-          console.error(`Error executing ${queryShopBillSqlBuild}, with error ${err.stack}\n`);
+          error(`Error executing ${queryShopBillSqlBuild}, with error ${err.stack}\n`);
           reject(err);
           return;
         }
         if (rows.length == 0) {
-          console.warn(`Executing ${queryShopBillSqlBuild} return empty result\n`);
+          info(`Executing ${queryShopBillSqlBuild} return empty result\n`);
           resolve(null);
           return;
         }
@@ -55,15 +55,15 @@ class YktManager {
   getDeviceBill(deviceId, accDate) {
     return new Promise((resolve, reject) => {
       const queryDeviceBillSqlBuild = util.format(this.queryDeviceBillSql, this.connection.escape(deviceId), this.connection.escape(accDate));
-      console.info(`getDeviceBill: Executing ${queryDeviceBillSqlBuild}\n`);
+      info(`getDeviceBill: Executing ${queryDeviceBillSqlBuild}\n`);
       this.connection.query(queryDeviceBillSqlBuild, (err, rows) => {
         if (err) {
-          console.error(`Error executing ${queryDeviceBillSqlBuild}, with error ${err.stack}\n`);
+          error(`Error executing ${queryDeviceBillSqlBuild}, with error ${err.stack}\n`);
           reject(err);
           return;
         }
         if (rows.length == 0) {
-          console.warn(`Executing ${queryDeviceBillSqlBuild} return empty result\n`);
+          info(`Executing ${queryDeviceBillSqlBuild} return empty result\n`);
           resolve(null);
           return;
         }
@@ -92,15 +92,15 @@ class YktManager {
     // 如果fShopId为null或undefined则全部获取
     return new Promise((resolve, reject) => {
       const querySql = fShopId ? util.format(this.queryTotalShopBillsByFShopIdSql, this.connection.escape(accDate), this.connection.escape(fShopId)) : util.format(this.queryTotalShopBillsSql, this.connection.escape(accDate));
-      console.info(`getDevices: Executing ${querySql}\n`);
+      info(`getDevices: Executing ${querySql}\n`);
       this.connection.query(querySql, (err, rows) => {
         if (err) {
-          console.error(`Error executing ${querySql}, with error ${err.stack}\n`);
+          error(`Error executing ${querySql}, with error ${err.stack}\n`);
           reject(err);
           return;
         }
         if (rows.length == 0) {
-          console.warn(`Executing ${querySql} return empty result\n`);
+          info(`Executing ${querySql} return empty result\n`);
           resolve(null);
           return;
         }
@@ -122,15 +122,15 @@ class YktManager {
   getDeviceBills(shopId, accDate) {
     return new Promise((resolve, reject) => {
       const queryDeviceBillsByShopIdSqlBuild = util.format(this.queryDeviceBillsByShopIdSql, this.connection.escape(accDate), this.connection.escape(shopId));
-      console.info(`getDeviceBill: Executing ${queryDeviceBillsByShopIdSqlBuild}\n`);
+      info(`getDeviceBill: Executing ${queryDeviceBillsByShopIdSqlBuild}\n`);
       this.connection.query(queryDeviceBillsByShopIdSqlBuild, (err, rows) => {
         if (err) {
-          console.error(`Error executing ${queryDeviceBillsByShopIdSqlBuild}, with error ${err.stack}\n`);
+          error(`Error executing ${queryDeviceBillsByShopIdSqlBuild}, with error ${err.stack}\n`);
           reject(err);
           return;
         }
         if (rows.length == 0) {
-          console.warn(`Executing ${queryDeviceBillsByShopIdSqlBuild} return empty result\n`);
+          info(`Executing ${queryDeviceBillsByShopIdSqlBuild} return empty result\n`);
           resolve(null);
           return;
         }
@@ -155,15 +155,15 @@ class YktManager {
   getDevices(shopId) {
     return new Promise((resolve, reject) => {
       const querySql = shopId ? util.format(this.queryDevicesByShopIdSql, this.connection.escape(shopId)) : this.queryDevicesSql;
-      console.info(`getDevices: Executing ${querySql}\n`);
+      info(`getDevices: Executing ${querySql}\n`);
       this.connection.query(querySql, (err, rows) => {
         if (err) {
-          console.error(`Error executing ${querySql}, with error ${err.stack}\n`);
+          error(`Error executing ${querySql}, with error ${err.stack}\n`);
           reject(err);
           return;
         }
         if (rows.length == 0) {
-          console.warn(`Executing ${querySql} return empty result\n`);
+          info(`Executing ${querySql} return empty result\n`);
           resolve(null);
           return;
         }
@@ -184,15 +184,15 @@ class YktManager {
   }
   getShops() {
     return new Promise((resolve, reject) => {
-      console.info(`getShops: Executing ${this.queryShopsSql}\n`);
+      info(`getShops: Executing ${this.queryShopsSql}\n`);
       this.connection.query(this.queryShopsSql, (err, rows) => {
         if (err) {
-          console.error(`Error executing ${this.queryShopsSql}, with error ${err.stack}\n`);
+          error(`Error executing ${this.queryShopsSql}, with error ${err.stack}\n`);
           reject(err);
           return;
         }
         if (rows.length == 0) {
-          console.warn(`Executing ${queryShopsSql} return empty result\n`);
+          info(`Executing ${queryShopsSql} return empty result\n`);
           resolve(null);
           return;
         }
