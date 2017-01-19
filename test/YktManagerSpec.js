@@ -19,7 +19,13 @@ describe('YktManager', () => {
 
   describe('yktManager test', () => {
 
-    const yktManager = new YktManager({url: process.env.DATABASE_URL});
+    const yktManager = new YktManager({
+      connectionLimit : process.env.CONNECTION_LIMIT ? process.env.CONNECTION_LIMIT : 10,
+      host            : process.env.HOST,
+      user            : process.env.USER,
+      password        : process.env.PASSWORD,
+      database        : process.env.DATABASE,
+    });
 
     it('should return a single shopBill in js object data structure', () => {
       return yktManager.getShopBill("107", "20170111").then(function(data) {
