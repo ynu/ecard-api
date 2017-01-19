@@ -19,12 +19,50 @@ describe('YktManager', () => {
 
   describe('yktManager test', () => {
 
-    const yktManager = new YktManager({
-      connectionLimit : process.env.CONNECTION_LIMIT ? process.env.CONNECTION_LIMIT : 10,
-      host            : process.env.HOST,
-      user            : process.env.USER,
-      password        : process.env.PASSWORD,
-      database        : process.env.DATABASE,
+    let yktManager;
+
+    before(function() {
+      // runs before all tests in this block
+      yktManager = new YktManager({
+        connectionLimit : process.env.CONNECTION_LIMIT ? process.env.CONNECTION_LIMIT : 10,
+        host            : process.env.HOST,
+        user            : process.env.USER,
+        password        : process.env.PASSWORD,
+        database        : process.env.DATABASE,
+      });
+
+    });
+
+    after(function() {
+      // runs after all tests in this block
+
+      function exitHandler(options, err) {
+        if (err) {
+          error(err.stack);
+        }
+        if (options.cleanup | options.exit) {
+          yktManager.pool.end(function (err) {
+            if (err) {
+              error(err.stack);
+              return;
+            }
+            info("all connection were clean up");
+          });
+        }
+        process.exit();
+      }
+
+      process.stdin.resume();//so the program will not close instantly
+
+      //do something when app is closing
+      process.on('exit', exitHandler.bind(null,{cleanup:true}));
+
+      //catches ctrl+c event
+      process.on('SIGINT', exitHandler.bind(null, {exit:true}));
+
+      //catches uncaught exceptions
+      process.on('uncaughtException', exitHandler.bind(null, {exit:true}));
+
     });
 
     it('should return a single shopBill in js object data structure', () => {
@@ -69,6 +107,8 @@ describe('YktManager', () => {
         expect(data.length).to.be.greaterThan(0);
       });
     });
+
+
 
   });
 
