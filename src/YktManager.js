@@ -1,5 +1,9 @@
 import mysql from 'mysql';
 import util from 'util';
+import debug from 'debug';
+
+const error = debug('ecard-api:error');
+const info = debug('ecard-api:info');
 
 class YktManager {
   constructor(options) {
@@ -23,12 +27,12 @@ class YktManager {
       const queryShopBillSqlBuild = util.format(this.queryShopBillSql, this.connection.escape(shopId), this.connection.escape(accDate));
       console.info(`getShopBill: Executing ${queryShopBillSqlBuild}\n`);
       this.connection.query(queryShopBillSqlBuild, (err, rows) => {
-        if(err) {
+        if (err) {
           console.error(`Error executing ${queryShopBillSqlBuild}, with error ${err.stack}\n`);
           reject(err);
           return;
         }
-        if(rows.length == 0) {
+        if (rows.length == 0) {
           console.warn(`Executing ${queryShopBillSqlBuild} return empty result\n`);
           resolve(null);
           return;
@@ -42,7 +46,7 @@ class YktManager {
           crAmt: rows[0].crAmt,
           level1: rows[0].level1,
           fShopId: rows[0].fShopId,
-          shopName2: rows[0].shopName2
+          shopName2: rows[0].shopName2,
         };
         resolve(shopBill);
       });
@@ -53,12 +57,12 @@ class YktManager {
       const queryDeviceBillSqlBuild = util.format(this.queryDeviceBillSql, this.connection.escape(deviceId), this.connection.escape(accDate));
       console.info(`getDeviceBill: Executing ${queryDeviceBillSqlBuild}\n`);
       this.connection.query(queryDeviceBillSqlBuild, (err, rows) => {
-        if(err) {
+        if (err) {
           console.error(`Error executing ${queryDeviceBillSqlBuild}, with error ${err.stack}\n`);
           reject(err);
           return;
         }
-        if(rows.length == 0) {
+        if (rows.length == 0) {
           console.warn(`Executing ${queryDeviceBillSqlBuild} return empty result\n`);
           resolve(null);
           return;
@@ -75,7 +79,7 @@ class YktManager {
           accNo: rows[0].accNo,
           shopName: rows[0].shopName,
           deviceNo: rows[0].deviceNo,
-          devPyhId: rows[0].devPyhId
+          devPyhId: rows[0].devPyhId,
         };
         resolve(deviceBill);
       });
@@ -90,29 +94,27 @@ class YktManager {
       const querySql = fShopId ? util.format(this.queryTotalShopBillsByFShopIdSql, this.connection.escape(accDate), this.connection.escape(fShopId)) : util.format(this.queryTotalShopBillsSql, this.connection.escape(accDate));
       console.info(`getDevices: Executing ${querySql}\n`);
       this.connection.query(querySql, (err, rows) => {
-        if(err) {
+        if (err) {
           console.error(`Error executing ${querySql}, with error ${err.stack}\n`);
           reject(err);
           return;
         }
-        if(rows.length == 0) {
+        if (rows.length == 0) {
           console.warn(`Executing ${querySql} return empty result\n`);
           resolve(null);
           return;
         }
-        const shopBills = rows.map(row => {
-          return {
-            shopId: row.shopId,
-            shopName: row.shopName,
-            accDate: row.accDate,
-            transCnt: row.transCnt,
-            drAmt: row.drAmt,
-            crAmt: row.crAmt,
-            level1: row.level1,
-            fShopId: row.fShopId,
-            shopName2: row.shopName2
-          };
-        });
+        const shopBills = rows.map(row => ({
+          shopId: row.shopId,
+          shopName: row.shopName,
+          accDate: row.accDate,
+          transCnt: row.transCnt,
+          drAmt: row.drAmt,
+          crAmt: row.crAmt,
+          level1: row.level1,
+          fShopId: row.fShopId,
+          shopName2: row.shopName2,
+        }));
         resolve(shopBills);
       });
     });
@@ -122,32 +124,30 @@ class YktManager {
       const queryDeviceBillsByShopIdSqlBuild = util.format(this.queryDeviceBillsByShopIdSql, this.connection.escape(accDate), this.connection.escape(shopId));
       console.info(`getDeviceBill: Executing ${queryDeviceBillsByShopIdSqlBuild}\n`);
       this.connection.query(queryDeviceBillsByShopIdSqlBuild, (err, rows) => {
-        if(err) {
+        if (err) {
           console.error(`Error executing ${queryDeviceBillsByShopIdSqlBuild}, with error ${err.stack}\n`);
           reject(err);
           return;
         }
-        if(rows.length == 0) {
+        if (rows.length == 0) {
           console.warn(`Executing ${queryDeviceBillsByShopIdSqlBuild} return empty result\n`);
           resolve(null);
           return;
         }
-        const deviceBills = rows.map(row => {
-          return {
-            deviceId: row.deviceId,
-            deviceName: row.deviceName,
-            accDate: row.accDate,
-            transCnt: row.transCnt,
-            drAmt: row.drAmt,
-            crAmt: row.crAmt,
-            fShopId: row.fShopId,
-            shopId: row.shopId,
-            accNo: row.accNo,
-            shopName: row.shopName,
-            deviceNo: row.deviceNo,
-            devPyhId: row.devPyhId
-          };
-        });
+        const deviceBills = rows.map(row => ({
+          deviceId: row.deviceId,
+          deviceName: row.deviceName,
+          accDate: row.accDate,
+          transCnt: row.transCnt,
+          drAmt: row.drAmt,
+          crAmt: row.crAmt,
+          fShopId: row.fShopId,
+          shopId: row.shopId,
+          accNo: row.accNo,
+          shopName: row.shopName,
+          deviceNo: row.deviceNo,
+          devPyhId: row.devPyhId,
+        }));
         resolve(deviceBills);
       });
     });
@@ -157,29 +157,27 @@ class YktManager {
       const querySql = shopId ? util.format(this.queryDevicesByShopIdSql, this.connection.escape(shopId)) : this.queryDevicesSql;
       console.info(`getDevices: Executing ${querySql}\n`);
       this.connection.query(querySql, (err, rows) => {
-        if(err) {
+        if (err) {
           console.error(`Error executing ${querySql}, with error ${err.stack}\n`);
           reject(err);
           return;
         }
-        if(rows.length == 0) {
+        if (rows.length == 0) {
           console.warn(`Executing ${querySql} return empty result\n`);
           resolve(null);
           return;
         }
-        const devices = rows.map(row => {
-          return {
-            deviceId: row.deviceId,
-            deviceName: row.deviceName,
-            fDeviceId: row.fDeviceId,
-            devPhyId: row.devPhyId,
-            deviceNo: row.deviceNo,
-            devPhyType: row.devPhyType,
-            devTypeCode: row.devTypeCode,
-            devVerNo: row.devVerNo,
-            status: row.status
-          };
-        });
+        const devices = rows.map(row => ({
+          deviceId: row.deviceId,
+          deviceName: row.deviceName,
+          fDeviceId: row.fDeviceId,
+          devPhyId: row.devPhyId,
+          deviceNo: row.deviceNo,
+          devPhyType: row.devPhyType,
+          devTypeCode: row.devTypeCode,
+          devVerNo: row.devVerNo,
+          status: row.status,
+        }));
         resolve(devices);
       });
     });
@@ -188,28 +186,26 @@ class YktManager {
     return new Promise((resolve, reject) => {
       console.info(`getShops: Executing ${this.queryShopsSql}\n`);
       this.connection.query(this.queryShopsSql, (err, rows) => {
-        if(err) {
+        if (err) {
           console.error(`Error executing ${this.queryShopsSql}, with error ${err.stack}\n`);
           reject(err);
           return;
         }
-        if(rows.length == 0) {
+        if (rows.length == 0) {
           console.warn(`Executing ${queryShopsSql} return empty result\n`);
           resolve(null);
           return;
         }
-        const shops = rows.map(row => {
-          return {
-            shopId: row.shopId,
-            shopName: row.shopName,
-            fShopId: row.fShopId,
-            areaCode: row.areaCode,
-            shopType: row.shopType,
-            accFlag: row.accFlag,
-            status: row.status,
-            accNo: row.accNo
-          };
-        });
+        const shops = rows.map(row => ({
+          shopId: row.shopId,
+          shopName: row.shopName,
+          fShopId: row.fShopId,
+          areaCode: row.areaCode,
+          shopType: row.shopType,
+          accFlag: row.accFlag,
+          status: row.status,
+          accNo: row.accNo,
+        }));
         resolve(shops);
       });
     });
@@ -217,10 +213,20 @@ class YktManager {
 
   /*
     获取指定商户的所有祖先商户节点
+    - 参数
+      - `shop` 指定的商户，至少包含`shopId`和`fShopId`两个字段；
+      - 或 `shopId` 指定的商户Id，可转换给数字的字符串。
+    - 返回值
+      - `Shop` 对象数组
    */
   async getAncestorShops(shop) {
     const shops = await this.getShops();
-    const getAncestors = shop2 => {
+    if (!shop.shopId) {
+      info('getAncestorShops:', 'the parameter shopId is ', shop);
+      shop = shops.find(s => s.shopId === shop); // eslint-disable-line no-param-reassign
+    }
+    info('getAncestorShops:', 'the parameter shop is ', shop);
+    const getAncestors = (shop2) => {
       // “0”是根节点的父节点
       if (shop2.fShopId === '0') return [];
       // 当前节点的父节点

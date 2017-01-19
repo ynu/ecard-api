@@ -32,10 +32,11 @@
 ### YktManager
 一卡通数据操作类
 
-#### async getAncestorShops(shop: Shop): [Shop]
+#### async getAncestorShops(shop: Shop | shopId: String): [Shop]
 获取指定商户的所有祖先商户节点。
 
 - 参数
-  - shop 指定的商户，至少包含`shopId`和`fShopId`两个字段。
+  - `shop` 指定的商户，至少包含`shopId`和`fShopId`两个字段；
+  - 或 `shopId` 指定的商户Id，可转换给数字的字符串。
 - 返回值
-  - `Shop` 对象列表
+  - `Shop` 对象数组
