@@ -1,6 +1,6 @@
 {
   "name": "ecard-api",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "",
   "main": "dist/index.js",
   "author": "",
@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "babel-runtime": "^6.11.6",
+    "debug": "^2.6.0",
     "mysql": "^2.12.0",
     "sequelize": "^3.28.0"
   },
