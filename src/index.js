@@ -7,7 +7,7 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import 'babel-polyfill';
+// import 'babel-polyfill';
 
 import express from 'express';
 import cookieParser from 'cookie-parser';

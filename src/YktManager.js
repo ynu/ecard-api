@@ -19,6 +19,7 @@ class YktManager {
     // this.queryDevicesByShopIdSql = 'select deviceid as deviceId, devicename as deviceName, id as id, areacode as areaCode, level_jb as levelJb, fshopid as fShopId, shopid as shopId, accno as accNo, shopfullname as shopFullName, shopname as shopName, shop_status as shopStatus, shoptype as shopType, accflag as accFlag, deviceno as deviceNo, devphyid as devPhyId, devtypecode as devTypeCode, device_status as deviceStatus from t_shopdevice where fshopid=%s;';
     this.queryDevicesByShopIdSql = 'select deviceid as deviceId, devicename as deviceName, fdeviceid as fDeviceId, devphyid as devPhyId, deviceno as deviceNo, devphytype as devPhyType, devtypecode as devTypeCode, devverno as devVerNo, status as status from t_device where deviceid in (select distinct deviceid from t_shopdevice where fshopid=%s);';
     this.queryShopsSql = 'select shopid as shopId, shopname as shopName, fshopid as fShopId, areacode as areaCode, shoptype as shopType, accflag as accFlag, status as status, accno as accNo from t_shop order by shopname;';
+    this.queryShopByIdSql = 'select shopid as shopId, shopname as shopName, fshopid as fShopId, areacode as areaCode, shoptype as shopType, accflag as accFlag, status as status, accno as accNo from t_shop where shopid=%s;';
     this.queryShopBillSql = 'select shopid as shopId, shopname as shopName, accdate as accDate, transcnt as transCnt, dramt as drAmt, cramt as crAmt, level1 as level1, fshopid as fShopId, shopname2 as shopName2 from t_shop_bill where shopid=%s and accdate=%s;';
     this.queryDeviceBillSql = 'select deviceid as deviceId, devicename as deviceName, accdate as accDate, transcnt as transCnt, dramt as drAmt, cramt as crAmt, fshopid as fShopId, shopid as shopId, accno as accNo, shopname as shopName, deviceno as deviceNo, devphyid as devPyhId from t_shopdevice_bill where deviceid=%s and accdate=%s;';
     this.queryTotalBillSql = 'select count(transcnt) as totalTransCnt, count(dramt) as totalDrAmt, count(cramt) as totalCrAmt from t_shopdevice_bill;';
@@ -211,6 +212,35 @@ class YktManager {
           accNo: row.accNo,
         }));
         resolve(shops);
+      });
+    });
+  }
+  getShop(shopId) {
+    return new Promise((resolve, reject) => {
+      const querySql = util.format(this.queryShopByIdSql, this.pool.escape(shopId));
+      info(`getDevices: Executing ${querySql}\n`);
+      this.pool.query(querySql, (err, rows) => {
+        if (err) {
+          error(`Error executing ${querySql}, with error ${err.stack}\n`);
+          reject(err);
+          return;
+        }
+        if (rows.length == 0) {
+          info(`Executing ${querySql} return empty result\n`);
+          resolve(null);
+          return;
+        }
+        const shop = {
+          shopId: rows[0].shopId,
+          shopName: rows[0].shopName,
+          fShopId: rows[0].fShopId,
+          areaCode: rows[0].areaCode,
+          shopType: rows[0].shopType,
+          accFlag: rows[0].accFlag,
+          status: rows[0].status,
+          accNo: rows[0].accNo,
+        };
+        resolve(shop);
       });
     });
   }

@@ -93,6 +93,13 @@ describe('YktManager', () => {
       });
     });
 
+    it('should return a single shop in js object data structure', () => {
+      return yktManager.getShop('15').then(function(data) {
+        info(`The return data is ${JSON.stringify(data, null, 2)}\n`);
+        expect(data).to.be.ok;
+      });
+    });
+
 
     it('should return a list of shopBill in js object data structure', () => {
       return yktManager.getShopBills("15", "20170111").then(function(data) {

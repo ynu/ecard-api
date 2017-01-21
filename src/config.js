@@ -6,3 +6,4 @@ export const database_host              = process.env.HOST;
 export const database_user              = process.env.USER;
 export const database_password          = process.env.PASSWORD;
 export const database_database          = process.env.DATABASE;
+export const secret                     = process.env.SECRET;
