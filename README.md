@@ -118,7 +118,7 @@
 }
 ```
 
-#### 获取商户日账单
+#### 获取指定商户日账单
 `GET /shop/:shopId/daily-bill/:accDate?token=TOKEN`
 
 - 参数
@@ -134,10 +134,10 @@
 ```
 
 #### 获取子商户日账单列表
-`GET /shop/:shopId/sub-shop-bills/:accDate?token=TOKEN`
+`GET /shop/:fShopId/sub-shop-bills/:accDate?token=TOKEN`
 
 - 参数
-  - `shopId` 指定的商户Id；
+  - `fShopId` 指定的父商户Id；
   - `accDate` 账单日期。8位数字的日期，格式为`YYYYMMDD`，例如：`20170119`；
   - `token` 访问系统的token。
 - 返回值
