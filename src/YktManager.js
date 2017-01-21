@@ -7,12 +7,12 @@ const info = debug('ecard-api:info');
 
 class YktManager {
   constructor(options) {
-    this.pool  = mysql.createPool({
-      connectionLimit : options.connectionLimit,
-      host            : options.host,
-      user            : options.user,
-      password        : options.password,
-      database        : options.database,
+    this.pool = mysql.createPool({
+      connectionLimit: options.connectionLimit,
+      host: options.host,
+      user: options.user,
+      password: options.password,
+      database: options.database,
     });
 
     this.queryDevicesSql = 'select deviceid as deviceId, devicename as deviceName, fdeviceid as fDeviceId, devphyid as devPhyId, deviceno as deviceNo, devphytype as devPhyType, devtypecode as devTypeCode, devverno as devVerNo, status as status from t_device;';
@@ -28,7 +28,11 @@ class YktManager {
   }
   getShopBill(shopId, accDate) {
     return new Promise((resolve, reject) => {
-      const queryShopBillSqlBuild = util.format(this.queryShopBillSql, this.pool.escape(shopId), this.pool.escape(accDate));
+      const queryShopBillSqlBuild = util.format(
+        this.queryShopBillSql,
+        this.pool.escape(shopId),
+        this.pool.escape(accDate)
+      );
       info(`getShopBill: Executing ${queryShopBillSqlBuild}\n`);
       this.pool.query(queryShopBillSqlBuild, (err, rows) => {
         if (err) {
@@ -36,7 +40,7 @@ class YktManager {
           reject(err);
           return;
         }
-        if (rows.length == 0) {
+        if (rows.length === 0) {
           info(`Executing ${queryShopBillSqlBuild} return empty result\n`);
           resolve(null);
           return;
@@ -58,7 +62,11 @@ class YktManager {
   }
   getDeviceBill(deviceId, accDate) {
     return new Promise((resolve, reject) => {
-      const queryDeviceBillSqlBuild = util.format(this.queryDeviceBillSql, this.pool.escape(deviceId), this.pool.escape(accDate));
+      const queryDeviceBillSqlBuild = util.format(
+        this.queryDeviceBillSql,
+        this.pool.escape(deviceId),
+        this.pool.escape(accDate)
+      );
       info(`getDeviceBill: Executing ${queryDeviceBillSqlBuild}\n`);
       this.pool.query(queryDeviceBillSqlBuild, (err, rows) => {
         if (err) {
@@ -66,7 +74,7 @@ class YktManager {
           reject(err);
           return;
         }
-        if (rows.length == 0) {
+        if (rows.length === 0) {
           info(`Executing ${queryDeviceBillSqlBuild} return empty result\n`);
           resolve(null);
           return;
