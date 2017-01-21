@@ -7,7 +7,7 @@
 ### 对象
 #### Shop
 - 示例
-  ```javascript
+```javascript
   {
     shopId: "1",
     fShopId: "0",
@@ -18,7 +18,7 @@
     status: "",
     accNo: ""
   }
-  ```
+```
 - 字段说明
   - shopId 商户编号
   - fShopId 父商户编号
@@ -83,3 +83,52 @@
   - `accDate` 账单日期。8为数字的日期，格式为`YYYYMMDD`，例如：`20170119`；
 - 返回值
   `DeviceDailyBill` 对象数组
+
+### RESTful 接口
+为方便使用，`ecard-api` 以RESTful的方式提供数据读取API。
+
+#### 返回值说明
+所有请求的返回值包括两种类型：
+- 操作成功返回：
+```javascript
+{
+  ret: 0,   // 操作成功时，返回码为0
+  data: ... // 操作返回的数据
+}
+```
+- 操作失败返回：
+```javascript
+{
+  ret: 401, // 操作失败时，返回码为非0值
+  msg: ""   // 错误提示
+}
+```
+
+#### 获取指定商户信息
+`GET /shop/:shopId?token=TOKEN`
+
+- 参数
+  - `shopId` 指定的商户Id；
+  - `token` 访问系统的token。
+- 返回值
+```javascript
+{
+  ret: 0,
+  data: { ... } // Shop 对象
+}
+```
+
+#### 获取商户日账单
+`GET /shop/:shopId/daily-bill/:accDate`
+
+- 参数
+  - `shopId` 指定的商户Id；
+  - `accDate` 账单日期。8为数字的日期，格式为`YYYYMMDD`，例如：`20170119`；
+  - `token` 访问系统的token。
+- 返回值
+```javascript
+{
+  ret: 0,
+  data: { ... } // ShopDailyBill 对象
+}
+```
