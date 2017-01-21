@@ -24,8 +24,8 @@ describe('YktManager', () => {
     before(function() {
       // runs before all tests in this block
       yktManager = new YktManager({
-        connectionLimit : process.env.CONNECTION_LIMIT ? process.env.CONNECTION_LIMIT : 10,
-        host            : process.env.HOST,
+        connectionLimit : process.env.CONNECTION_LIMIT || 10,
+        host            : process.env.DATABASE_HOST,
         user            : process.env.USER,
         password        : process.env.PASSWORD,
         database        : process.env.DATABASE,
@@ -93,6 +93,13 @@ describe('YktManager', () => {
       });
     });
 
+    it('should return a single shop in js object data structure', () => {
+      return yktManager.getShop('15').then(function(data) {
+        info(`The return data is ${JSON.stringify(data, null, 2)}\n`);
+        expect(data).to.be.ok;
+      });
+    });
+
 
     it('should return a list of shopBill in js object data structure', () => {
       return yktManager.getShopBills("15", "20170111").then(function(data) {
@@ -105,6 +112,27 @@ describe('YktManager', () => {
       return yktManager.getDeviceBills("107", "20170111").then(function(data) {
         info(`The return data is ${JSON.stringify(data, null, 2)}\n`);
         expect(data.length).to.be.greaterThan(0);
+      });
+    });
+
+    it('should return a single shopBill in js object data structure', () => {
+      return yktManager.getShopBillMonth("107", "20161226-20170125").then(function(data) {
+        info(`The return data is ${JSON.stringify(data, null, 2)}\n`);
+        expect(data).to.be.ok;
+      });
+    });
+
+    it('should return a list of shopBill in js object data structure', () => {
+      return yktManager.getShopBillsMonth("15", "20161226-20170125").then(function(data) {
+        info(`The return data is ${JSON.stringify(data, null, 2)}\n`);
+        expect(data.length).to.be.equal(5);
+      });
+    });
+
+    it('should return a list of shopBill in js object data structure', () => {
+      return yktManager.getShopBillsMonth(null, "20161226-20170125").then(function(data) {
+        info(`The return data is ${JSON.stringify(data, null, 2)}\n`);
+        expect(data.length).to.be.equal(125);
       });
     });
 
