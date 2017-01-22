@@ -1,0 +1,12 @@
+# node application for ecard-api
+ecard-api:
+    image: ynuae/ecard-api
+    ports:
+      - "50013:3000"
+    environment:
+      - DATABASE_HOST=${DATABASE_HOST}
+      - USER=${USER}
+      - PASSWORD=${PASSWORD}
+      - DATABASE=${DATABASE}
+      - SECRET=${SECRET}
+    restart: always
