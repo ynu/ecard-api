@@ -4,25 +4,54 @@
 
 import { Router } from 'express';
 import expressJwt from 'express-jwt';
-import { getToken } from './utils'
+import { getToken } from './utils';
 import YktManager from './YktManager';
 
 import { database_connectionLimit, database_host, database_user, database_password, database_database, secret } from './config';
 
 const router = new Router();
 const yktManager = new YktManager({
-  connectionLimit : database_connectionLimit,
-  host            : database_host,
-  user            : database_user,
-  password        : database_password,
-  database        : database_database,
+  connectionLimit: database_connectionLimit,
+  host: database_host,
+  user: database_user,
+  password: database_password,
+  database: database_database,
 });
 
 const expressJwtOptions = {
-  secret: secret,
+  secret,
   credentialsRequired: true,
-  getToken: getToken
+  getToken,
 };
+
+// 获取所有商户的信息
+// GET /shop/all?token=TOKEN
+router.get('/all',
+  expressJwt(expressJwtOptions),
+  async (req, res) => {
+    try {
+      const data = await yktManager.getShops();
+      res.json({ ret: 0, data });
+    } catch (err) {
+      res.json({ ret: 500, msg: err.message });
+    }
+  }
+);
+
+// 获取指定日期所有商户的日账单
+// GET /shop/all/daily-bill/:accDate?token=TOKEN
+router.get('/all/daily-bill/:accDate',
+  expressJwt(expressJwtOptions),
+  async (req, res) => {
+    try {
+      const { accDate } = req.params;
+      const data = await yktManager.getShopBills(null, accDate);
+      res.json({ ret: 0, data });
+    } catch (err) {
+      res.json({ ret: 500, msg: err.message });
+    }
+  }
+);
 
 // 获取指定商户信息
 // GET /shop/:shopId?token=TOKEN
@@ -114,5 +143,19 @@ router.get('/:shopId/device-monthly-bill/:accDate', expressJwt(expressJwtOptions
     res.json({ ret: 500, data: err });
   }
 });
+
+// 获取指定商户节点的所有祖先节点
+// GET /shop/:shopId/ancestors?token=TOKEN
+router.get('/:shopId/ancestors',
+  expressJwt(expressJwtOptions),
+  async (req, res) => {
+    try {
+      const data = await yktManager.getAncestorShops(req.params);
+      res.json({ ret: 0, data });
+    } catch (e) {
+      res.json({ ret: 500, msg: e.message });
+    }
+  }
+);
 
 export default router;
