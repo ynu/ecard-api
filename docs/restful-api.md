@@ -134,3 +134,18 @@
   data: [ ... ] // DeviceBill 对象数组
 }
 ```
+
+### 获取指定商户节点的所有祖先节点
+
+`GET /shop/:shopId/ancestors?token=TOKEN`
+
+- 参数
+  - `shopId` 指定的商户Id；
+  - `token` 访问系统的token。
+- 返回值
+```javascript
+{
+  ret: 0,
+  data: [ ... ] // Shop 对象数组
+}
+```
