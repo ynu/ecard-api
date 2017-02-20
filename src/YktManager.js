@@ -21,8 +21,10 @@ class YktManager {
     // this.queryDevicesByShopIdSql = 'select deviceid as deviceId, devicename as deviceName, id as id, areacode as areaCode, level_jb as levelJb, fshopid as fShopId, shopid as shopId, accno as accNo, shopfullname as shopFullName, shopname as shopName, shop_status as shopStatus, shoptype as shopType, accflag as accFlag, deviceno as deviceNo, devphyid as devPhyId, devtypecode as devTypeCode, device_status as deviceStatus from t_shopdevice where fshopid=%s;';
     this.queryDevicesByShopIdSql = 'select deviceid as deviceId, devicename as deviceName, fdeviceid as fDeviceId, devphyid as devPhyId, deviceno as deviceNo, devphytype as devPhyType, devtypecode as devTypeCode, devverno as devVerNo, status as status from t_device where deviceid in (select distinct deviceid from t_shopdevice where fshopid=%s);';
     this.queryShopsSql = 'select shopid as shopId, shopname as shopName, fshopid as fShopId, areacode as areaCode, shoptype as shopType, accflag as accFlag, status as status, accno as accNo from t_shop order by shopname;';
-    this.queryShopByIdSql = 'select shopid as shopId, shopname as shopName, fshopid as fShopId, areacode as areaCode, shoptype as shopType, accflag as accFlag, status as status, accno as accNo from t_shop where shopid=%s;';
-    this.queryShopBillSql = 'select shopid as shopId, shopname as shopName, accdate as accDate, transcnt as transCnt, dramt as drAmt, cramt as crAmt, level1 as level1, fshopid as fShopId, shopname2 as shopName2 from t_shop_bill where shopid=%s and accdate=%s;';
+    this.queryShopByShopIdSql = 'select shopid as shopId, shopname as shopName, fshopid as fShopId, areacode as areaCode, shoptype as shopType, accflag as accFlag, status as status, accno as accNo from t_shop where shopid=%s;';
+    this.queryShopBillByShopIDAndAccDateSql = 'select shopid as shopId, shopname as shopName, accdate as accDate, transcnt as transCnt, dramt as drAmt, cramt as crAmt, level1 as level1, fshopid as fShopId, shopname2 as shopName2 from t_shop_bill where shopid=%s and accdate=%s;';
+    this.queryShopBillsByShopID = 'select shopid as shopId, shopname as shopName, accdate as accDate, transcnt as transCnt, dramt as drAmt, cramt as crAmt, level1 as level1, fshopid as fShopId, shopname2 as shopName2 from t_shop_bill where shopid=%s;';
+    this.queryShopBillsByAccDate = 'select shopid as shopId, shopname as shopName, accdate as accDate, transcnt as transCnt, dramt as drAmt, cramt as crAmt, level1 as level1, fshopid as fShopId, shopname2 as shopName2 from t_shop_bill where accdate=%s;';
     this.queryDeviceBillSql = 'select deviceid as deviceId, devicename as deviceName, accdate as accDate, transcnt as transCnt, dramt as drAmt, cramt as crAmt, fshopid as fShopId, shopid as shopId, accno as accNo, shopname as shopName, deviceno as deviceNo, devphyid as devPyhId from t_shopdevice_bill where deviceid=%s and accdate=%s;';
     this.queryTotalBillSql = 'select count(transcnt) as totalTransCnt, count(dramt) as totalDrAmt, count(cramt) as totalCrAmt from t_shopdevice_bill;';
     this.queryShopBillsSql = 'select shopid as shopId, shopname as shopName, accdate as accDate, transcnt as transCnt, dramt as drAmt, cramt as crAmt, level1 as level1, fshopid as fShopId, shopname2 as shopName2 from t_shop_bill where accDate=%s;';
@@ -34,11 +36,7 @@ class YktManager {
   }
   getShopBill(shopId, accDate) {
     return new Promise((resolve, reject) => {
-      const queryShopBillSqlBuild = util.format(
-        this.queryShopBillSql,
-        mysql.escape(shopId),
-        mysql.escape(accDate)
-      );
+      const queryShopBillSqlBuild = util.format(this.queryShopBillByShopIDAndAccDateSql, mysql.escape(shopId), mysql.escape(accDate));
       info(`getShopBill: Executing ${queryShopBillSqlBuild}\n`);
       this.pool.query(queryShopBillSqlBuild, (err, rows) => {
         if (err) {
@@ -63,6 +61,66 @@ class YktManager {
           shopName2: rows[0].shopName2,
         };
         resolve(shopBill);
+      });
+    });
+  }
+  getShopBillsByShopId(shopId) {
+    return new Promise((resolve, reject) => {
+      const queryShopBillsSqlBuild = util.format(this.queryShopBillsByShopID, mysql.escape(shopId));
+      info(`getShopBill: Executing ${queryShopBillsSqlBuild}\n`);
+      this.pool.query(queryShopBillsSqlBuild, (err, rows) => {
+        if (err) {
+          error(`Error executing ${queryShopBillsSqlBuild}, with error ${err.stack}\n`);
+          reject(err);
+          return;
+        }
+        if (rows.length === 0) {
+          info(`Executing ${queryShopBillsSqlBuild} return empty result\n`);
+          resolve(null);
+          return;
+        }
+        const shopBills =  rows.map(row => ({
+          shopId: row.shopId,
+          shopName: row.shopName,
+          accDate: row.accDate,
+          transCnt: row.transCnt,
+          drAmt: row.drAmt,
+          crAmt: row.crAmt,
+          level1: row.level1,
+          fShopId: row.fShopId,
+          shopName2: row.shopName2,
+        }));
+        resolve(shopBills);
+      });
+    });
+  }
+  getShopBillsByAccDate(accDate) {
+    return new Promise((resolve, reject) => {
+      const queryShopBillsSqlBuild = util.format(this.queryShopBillsByAccDate, mysql.escape(accDate));
+      info(`getShopBill: Executing ${queryShopBillsSqlBuild}\n`);
+      this.pool.query(queryShopBillsSqlBuild, (err, rows) => {
+        if (err) {
+          error(`Error executing ${queryShopBillsSqlBuild}, with error ${err.stack}\n`);
+          reject(err);
+          return;
+        }
+        if (rows.length === 0) {
+          info(`Executing ${queryShopBillsSqlBuild} return empty result\n`);
+          resolve(null);
+          return;
+        }
+        const shopBills =  rows.map(row => ({
+          shopId: row.shopId,
+          shopName: row.shopName,
+          accDate: row.accDate,
+          transCnt: row.transCnt,
+          drAmt: row.drAmt,
+          crAmt: row.crAmt,
+          level1: row.level1,
+          fShopId: row.fShopId,
+          shopName2: row.shopName2,
+        }));
+        resolve(shopBills);
       });
     });
   }
@@ -230,7 +288,7 @@ class YktManager {
   }
   getShop(shopId) {
     return new Promise((resolve, reject) => {
-      const querySql = util.format(this.queryShopByIdSql, mysql.escape(shopId));
+      const querySql = util.format(this.queryShopByShopIdSql, mysql.escape(shopId));
       info(`getDevices: Executing ${querySql}\n`);
       this.pool.query(querySql, (err, rows) => {
         if (err) {
