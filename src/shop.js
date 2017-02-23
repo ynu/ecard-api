@@ -110,6 +110,18 @@ router.get('/:shopId/device-daily-bills/:accDate', expressJwt(expressJwtOptions)
   }
 });
 
+// 获取指定日期所有商户的月账单
+// GET /shop/all/monthly-bill/:accDate?token=TOKEN
+router.get('/all/monthly-bill/:accDate', expressJwt(expressJwtOptions), async (req, res) => {
+  try {
+    const accDate = req.params.accDate;
+    const shopBills = await yktManager.getShopBillsMonth(null, accDate);
+    res.json({ ret: 0, data: shopBills });
+  } catch (err) {
+    res.json({ ret: 500, data: err });
+  }
+});
+
 // 获取指定商户单月账单
 // GET /shop/:shopId/monthly-bill/:accDate?token=TOKEN
 router.get('/:shopId/monthly-bill/:accDate', expressJwt(expressJwtOptions), async (req, res) => {
@@ -118,18 +130,6 @@ router.get('/:shopId/monthly-bill/:accDate', expressJwt(expressJwtOptions), asyn
     const accDate = req.params.accDate;
     const shopBill = await yktManager.getShopBillMonth(shopId, accDate);
     res.json({ ret: 0, data: shopBill });
-  } catch (err) {
-    res.json({ ret: 500, data: err });
-  }
-});
-
-// 获取指定日期所有商户的月账单
-// GET /shop/all/monthly-bill/:accDate?token=TOKEN
-router.get('/all/monthly-bill/:accDate', expressJwt(expressJwtOptions), async (req, res) => {
-  try {
-    const accDate = req.params.accDate;
-    const shopBills = await yktManager.getShopBillsMonth(null, accDate);
-    res.json({ ret: 0, data: shopBills });
   } catch (err) {
     res.json({ ret: 500, data: err });
   }
