@@ -123,6 +123,18 @@ router.get('/:shopId/monthly-bill/:accDate', expressJwt(expressJwtOptions), asyn
   }
 });
 
+// 获取指定日期所有商户的月账单
+// GET /shop/all/monthly-bill/:accDate?token=TOKEN
+router.get('/all/monthly-bill/:accDate', expressJwt(expressJwtOptions), async (req, res) => {
+  try {
+    const accDate = req.params.accDate;
+    const shopBills = await yktManager.getShopBillsMonth(null, accDate);
+    res.json({ ret: 0, data: shopBills });
+  } catch (err) {
+    res.json({ ret: 500, data: err });
+  }
+});
+
 // 获取子商户月账单列表
 // GET /shop/:fShopId/sub-shop-monthly-bills/:accDate?token=TOKEN
 router.get('/:fShopId/sub-shop-monthly-bills/:accDate', expressJwt(expressJwtOptions), async (req, res) => {
