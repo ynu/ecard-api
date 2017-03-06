@@ -33,6 +33,14 @@ app.use(morgan('dev'));
 */
 app.use('/shop', shop);
 
+/*
+处理异常
+ */
+app.use(async (err, req, res, next) => {
+  console.log(err);
+  res.json({ret: err.status, data: err.message});
+});
+
 app.listen(port, () => {
   console.log(`The server is running at http://${host}/`);
 });
