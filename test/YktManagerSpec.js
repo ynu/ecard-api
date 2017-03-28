@@ -102,7 +102,7 @@ describe('YktManager', () => {
 
 
     it('should return a list of shopBill in js object data structure', () => {
-      return yktManager.getShopBills("15", "20170111").then(function(data) {
+      return yktManager.getShopBillsByShopId("15", "20170111").then(function(data) {
         info(`The return data is ${JSON.stringify(data, null, 2)}\n`);
         expect(data.length).to.be.greaterThan(0);
       });
@@ -116,23 +116,37 @@ describe('YktManager', () => {
     });
 
     it('should return a single shopBill in js object data structure', () => {
-      return yktManager.getShopBillMonth("107", "20161226-20170125").then(function(data) {
+      return yktManager.getShopBillMonth("107", "201703").then(function(data) {
         info(`The return data is ${JSON.stringify(data, null, 2)}\n`);
         expect(data).to.be.ok;
       });
     });
 
     it('should return a list of shopBill in js object data structure', () => {
-      return yktManager.getShopBillsMonth("15", "20161226-20170125").then(function(data) {
+      return yktManager.getShopBillsMonth("15", "201703").then(function(data) {
         info(`The return data is ${JSON.stringify(data, null, 2)}\n`);
         expect(data.length).to.be.equal(5);
       });
     });
 
     it('should return a list of shopBill in js object data structure', () => {
-      return yktManager.getShopBillsMonth(null, "20161226-20170125").then(function(data) {
+      return yktManager.getShopBillsMonth(null, "201703").then(function(data) {
         info(`The return data is ${JSON.stringify(data, null, 2)}\n`);
-        expect(data.length).to.be.equal(125);
+        expect(data.length).to.be.greaterThan(0);
+      });
+    });
+
+    it('should return a list of operatorBills in js object data structure', () => {
+      return yktManager.getOperatorBillsByAccDate("20170303").then(function(data) {
+        info(`The return data is ${JSON.stringify(data, null, 2)}\n`);
+        expect(data.length).to.be.equal(12);
+      });
+    });
+
+    it('should return a list of operatorBills in js object data structure', () => {
+      return yktManager.getOperatorBillsByOperCodeAndAccDate("1002680", "20170303").then(function(data) {
+        info(`The return data is ${JSON.stringify(data, null, 2)}\n`);
+        expect(data.length).to.be.equal(2);
       });
     });
 

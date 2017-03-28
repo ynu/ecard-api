@@ -14,6 +14,7 @@ import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import { host, port } from './config';
 import shop from './shop';
+import operator from './operator';
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.use(morgan('dev'));
 注册API
 */
 app.use('/shop', shop);
+app.use('/operator', operator);
 
 /*
 处理异常

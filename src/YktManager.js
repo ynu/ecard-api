@@ -33,6 +33,8 @@ class YktManager {
     this.queryShopBillMonthSql = 'select accdate as accDate, rn as rn, l1 as l1, fshopid as fShopId, shopid as shopId, shopname2 as shopName2, shopname as shopName, transcnt as transCnt, drmant as drAmt, cramt as crAmt from t_shop_bill_month where shopid=%s and accDate=%s;';
     this.queryShopBillsMonthSql = 'select accdate as accDate, rn as rn, l1 as l1, fshopid as fShopId, shopid as shopId, shopname2 as shopName2, shopname as shopName, transcnt as transCnt, drmant as drAmt, cramt as crAmt from t_shop_bill_month where accDate=%s;';
     this.queryShopBillsMonthByFShopIdSql = 'select accdate as accDate, rn as rn, l1 as l1, fshopid as fShopId, shopid as shopId, shopname2 as shopName2, shopname as shopName, transcnt as transCnt, drmant as drAmt, cramt as crAmt from t_shop_bill_month where fshopid=%s and accDate=%s;';
+    this.queryOperatorBillsByAccDateSql = 'select primarykey as primaryKey, accdate as accDate, opercode as operCode, opername as operName, subjno as subjNo, subjname as subjName, transtype as transType, summary as summary, transcnt as transCnt, inamt as inAmt, outamt as outAmt from t_operator_bill where accDate=%s;';
+    this.queryOperatorBillsByOperCodeAndAccDateSql = 'select primarykey as primaryKey, accdate as accDate, opercode as operCode, opername as operName, subjno as subjNo, subjname as subjName, transtype as transType, summary as summary, transcnt as transCnt, inamt as inAmt, outamt as outAmt from t_operator_bill where opercode=%s and accDate=%s;';
   }
   getShopBill(shopId, accDate) {
     return new Promise((resolve, reject) => {
@@ -409,6 +411,70 @@ class YktManager {
       ];
     };
     return getAncestors(shop);
+  }
+  getOperatorBillsByAccDate(accDate) {
+    return new Promise((resolve, reject) => {
+      const queryOperatorBillsSqlBuild = util.format(this.queryOperatorBillsByAccDateSql, mysql.escape(accDate));
+      info(`getOperatorBillsByAccDate: Executing ${queryOperatorBillsSqlBuild}\n`);
+      this.pool.query(queryOperatorBillsSqlBuild, (err, rows) => {
+        if (err) {
+          error(`Error executing ${queryOperatorBillsSqlBuild}, with error ${err.stack}\n`);
+          reject(err);
+          return;
+        }
+        if (rows.length === 0) {
+          info(`Executing ${queryOperatorBillsSqlBuild} return empty result\n`);
+          resolve(null);
+          return;
+        }
+        const operatorBills =  rows.map(row => ({
+          primaryKey: row.primaryKey,
+          accDate: row.accDate,
+          operCode: row.operCode,
+          operName: row.operName,
+          subjNo: row.subjNo,
+          subjName: row.subjName,
+          transType: row.transType,
+          summary: row.summary,
+          transCnt: row.transCnt,
+          inAmt: row.inAmt,
+          outAmt: row.outAmt
+        }));
+        resolve(operatorBills);
+      });
+    });
+  }
+  getOperatorBillsByOperCodeAndAccDate(operCode, accDate) {
+    return new Promise((resolve, reject) => {
+      const queryOperatorBillsSqlBuild = util.format(this.queryOperatorBillsByOperCodeAndAccDateSql, mysql.escape(operCode), mysql.escape(accDate));
+      info(`getOperatorBillsByOperCodeAndAccDate: Executing ${queryOperatorBillsSqlBuild}\n`);
+      this.pool.query(queryOperatorBillsSqlBuild, (err, rows) => {
+        if (err) {
+          error(`Error executing ${queryOperatorBillsSqlBuild}, with error ${err.stack}\n`);
+          reject(err);
+          return;
+        }
+        if (rows.length === 0) {
+          info(`Executing ${queryOperatorBillsSqlBuild} return empty result\n`);
+          resolve(null);
+          return;
+        }
+        const operatorBills =  rows.map(row => ({
+          primaryKey: row.primaryKey,
+          accDate: row.accDate,
+          operCode: row.operCode,
+          operName: row.operName,
+          subjNo: row.subjNo,
+          subjName: row.subjName,
+          transType: row.transType,
+          summary: row.summary,
+          transCnt: row.transCnt,
+          inAmt: row.inAmt,
+          outAmt: row.outAmt
+        }));
+        resolve(operatorBills);
+      });
+    });
   }
 }
 
