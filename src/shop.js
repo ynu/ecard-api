@@ -103,8 +103,8 @@ router.get('/:shopId/device-daily-bills/:accDate', expressJwt(expressJwtOptions)
   try {
     const shopId = req.params.shopId;
     const accDate = req.params.accDate;
-    const shopBills = await yktManager.getDeviceBills(shopId, accDate);
-    res.json({ ret: 0, data: shopBills });
+    const deviceBills = await yktManager.getDeviceBills(shopId, accDate);
+    res.json({ ret: 0, data: deviceBills });
   } catch (err) {
     res.json({ ret: 500, data: err });
   }
@@ -115,8 +115,8 @@ router.get('/:shopId/device-daily-bills/:accDate', expressJwt(expressJwtOptions)
 router.get('/all/monthly-bill/:accDate', expressJwt(expressJwtOptions), async (req, res) => {
   try {
     const accDate = req.params.accDate;
-    const shopBills = await yktManager.getShopBillsMonth(null, accDate);
-    res.json({ ret: 0, data: shopBills });
+    const shopBillsMonth = await yktManager.getShopBillsMonth(null, accDate);
+    res.json({ ret: 0, data: shopBillsMonth });
   } catch (err) {
     res.json({ ret: 500, data: err });
   }
@@ -128,8 +128,8 @@ router.get('/:shopId/monthly-bill/:accDate', expressJwt(expressJwtOptions), asyn
   try {
     const shopId = req.params.shopId;
     const accDate = req.params.accDate;
-    const shopBill = await yktManager.getShopBillMonth(shopId, accDate);
-    res.json({ ret: 0, data: shopBill });
+    const shopBillMonth = await yktManager.getShopBillMonth(shopId, accDate);
+    res.json({ ret: 0, data: shopBillMonth });
   } catch (err) {
     res.json({ ret: 500, data: err });
   }
@@ -141,8 +141,8 @@ router.get('/:fShopId/sub-shop-monthly-bills/:accDate', expressJwt(expressJwtOpt
   try {
     const fShopId = req.params.fShopId;
     const accDate = req.params.accDate;
-    const shopBills = await yktManager.getShopBillsMonth(fShopId, accDate);
-    res.json({ ret: 0, data: shopBills });
+    const shopBillsMonth = await yktManager.getShopBillsMonth(fShopId, accDate);
+    res.json({ ret: 0, data: shopBillsMonth });
   } catch (err) {
     res.json({ ret: 500, data: err });
   }
