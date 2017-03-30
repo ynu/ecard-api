@@ -12,11 +12,10 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 
 # all paths will be relative to the basePath specified
-# host: localhost
-# basePath: /
+host: ecard-api.ynu.edu.cn
+basePath: ""
 
 schemes:
- - https
  - http
 
 securityDefinitions:
