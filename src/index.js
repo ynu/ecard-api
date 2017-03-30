@@ -25,18 +25,23 @@ app.use(cookieParser('my cookie key'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+app.use(express.static('public'));
 
 const morgan = require('morgan');
 app.use(morgan('dev'));
 
 /*
-注册API
-*/
+ 注册API
+ */
 app.use('/shop', shop);
 app.use('/operator', operator);
 
+app.get('/', function (req, res) {
+  res.sendfile(__dirname + '/public/index.html');
+});
+
 /*
-处理异常
+ 处理异常
  */
 app.use(async (err, req, res, next) => {
   console.log(err);
