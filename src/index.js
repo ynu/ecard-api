@@ -10,6 +10,7 @@
 // import 'babel-polyfill';
 
 import express from 'express';
+import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import { host, port } from './config';
@@ -21,6 +22,7 @@ const app = express();
 //
 // Register Node.js middleware
 // -----------------------------------------------------------------------------
+app.use(cors());
 app.use(cookieParser('my cookie key'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ limit: '50mb' }));
