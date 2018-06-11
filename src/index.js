@@ -16,6 +16,8 @@ import bodyParser from 'body-parser';
 import { host, port } from './config';
 import shop from './shop';
 import operator from './operator';
+import custcardinfo from './custcardinfo';
+import userdtl from './userdtl';
 
 const app = express();
 
@@ -37,6 +39,8 @@ app.use(morgan('dev'));
  */
 app.use('/shop', shop);
 app.use('/operator', operator);
+app.use('/custcardinfo', custcardinfo);
+app.use('/userdtl', userdtl);
 
 app.get('/', function (req, res) {
   res.sendfile(__dirname + '/public/index.html');

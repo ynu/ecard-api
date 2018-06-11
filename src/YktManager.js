@@ -35,6 +35,11 @@ class YktManager {
     this.queryShopBillsMonthByFShopIdSql = 'select accdate as accDate, rn as rn, l1 as l1, fshopid as fShopId, shopid as shopId, shopname2 as shopName2, shopname as shopName, transcnt as transCnt, drmant as drAmt, cramt as crAmt from t_shop_bill_month where fshopid=%s and accDate=%s;';
     this.queryOperatorBillsByAccDateSql = 'select primarykey as primaryKey, accdate as accDate, opercode as operCode, opername as operName, subjno as subjNo, subjname as subjName, transtype as transType, summary as summary, transcnt as transCnt, inamt as inAmt, outamt as outAmt from t_operator_bill where accDate=%s;';
     this.queryOperatorBillsByOperCodeAndAccDateSql = 'select primarykey as primaryKey, accdate as accDate, opercode as operCode, opername as operName, subjno as subjNo, subjname as subjName, transtype as transType, summary as summary, transcnt as transCnt, inamt as inAmt, outamt as outAmt from t_operator_bill where opercode=%s and accDate=%s;';
+    this.queryCustCardInfoSql = 'select `stuempno`, `custname`, `cardno`, `cardstatus`, `balance`, `showcardno`, `cardphyid`, `expiredate`, `opendate`, `cardverno`, `cardtype`, `cardtypename`, `custid`, `feetype`, `feename`, `custtype`, `custtypename`, `deptcode`, `deptname`, `specialtycode`, `specialtyname`, `sex`, `idtype`, `idtypename`, `idno`, `areacode`, `areaname`, `classcode`, `countrycode`, `country`, `email`, `nationcode`, `nation`, `tel`, `mobile`, `zipcode`, `cardupdtime`, `custupdtime`, `STUEMPNO`, `CUSTNAME`, `CARDNO`, `CARDSTATUS`, `BALANCE`, `SHOWCARDNO`, `CARDPHYID`, `EXPIREDATE`, `OPENDATE`, `CARDVERNO`, `CARDTYPE`, `CARDTYPENAME`, `CUSTID`, `FEETYPE`, `FEENAME`, `CUSTTYPE`, `CUSTTYPENAME`, `DEPTCODE`, `DEPTNAME`, `SPECIALTYCODE`, `SPECIALTYNAME`, `SEX`, `IDTYPE`, `IDTYPENAME`, `IDNO`, `AREACODE`, `AREANAME`, `CLASSCODE`, `COUNTRYCODE`, `COUNTRY`, `EMAIL`, `NATIONCODE`, `NATION`, `TEL`, `MOBILE`, `ZIPCODE`, `CARDUPDTIME`, `CUSTUPDTIME` from t_custcardinfo;';
+    this.queryCustCardInfoByStuempnoSql = 'select `stuempno`, `custname`, `cardno`, `cardstatus`, `balance`, `showcardno`, `cardphyid`, `expiredate`, `opendate`, `cardverno`, `cardtype`, `cardtypename`, `custid`, `feetype`, `feename`, `custtype`, `custtypename`, `deptcode`, `deptname`, `specialtycode`, `specialtyname`, `sex`, `idtype`, `idtypename`, `idno`, `areacode`, `areaname`, `classcode`, `countrycode`, `country`, `email`, `nationcode`, `nation`, `tel`, `mobile`, `zipcode`, `cardupdtime`, `custupdtime`, `STUEMPNO`, `CUSTNAME`, `CARDNO`, `CARDSTATUS`, `BALANCE`, `SHOWCARDNO`, `CARDPHYID`, `EXPIREDATE`, `OPENDATE`, `CARDVERNO`, `CARDTYPE`, `CARDTYPENAME`, `CUSTID`, `FEETYPE`, `FEENAME`, `CUSTTYPE`, `CUSTTYPENAME`, `DEPTCODE`, `DEPTNAME`, `SPECIALTYCODE`, `SPECIALTYNAME`, `SEX`, `IDTYPE`, `IDTYPENAME`, `IDNO`, `AREACODE`, `AREANAME`, `CLASSCODE`, `COUNTRYCODE`, `COUNTRY`, `EMAIL`, `NATIONCODE`, `NATION`, `TEL`, `MOBILE`, `ZIPCODE`, `CARDUPDTIME`, `CUSTUPDTIME` from t_custcardinfo where stuempno = %s;';
+    this.queryUserDtlSql = 'select `accdate`, `acctime`, `refno`, `cardno`, `termdate`, `termtime`, `beffrozebal`, `befavailbal`, `aftavailbal`, `aftfrozebal`, `amount`, `ispwdconfirm`, `managefee`, `managefeetype`, `revflag`, `transcode`, `transmode`, `transtype`, `transdesc`, `merchaccno`, `termid`, `termseqno`, `operid`, `custid`, `custname`, `stuempno`, `srctable`, `barcode`, `status`, `wcstatus`, `errcode`, `remark`, `mac` from t_userdtl;';
+    this.queryUserDtlByRefnoSql = 'select `accdate`, `acctime`, `refno`, `cardno`, `termdate`, `termtime`, `beffrozebal`, `befavailbal`, `aftavailbal`, `aftfrozebal`, `amount`, `ispwdconfirm`, `managefee`, `managefeetype`, `revflag`, `transcode`, `transmode`, `transtype`, `transdesc`, `merchaccno`, `termid`, `termseqno`, `operid`, `custid`, `custname`, `stuempno`, `srctable`, `barcode`, `status`, `wcstatus`, `errcode`, `remark`, `mac` from t_userdtl where refno=%s;';
+    this.queryUserDtlByAccDateSql = 'select `accdate`, `acctime`, `refno`, `cardno`, `termdate`, `termtime`, `beffrozebal`, `befavailbal`, `aftavailbal`, `aftfrozebal`, `amount`, `ispwdconfirm`, `managefee`, `managefeetype`, `revflag`, `transcode`, `transmode`, `transtype`, `transdesc`, `merchaccno`, `termid`, `termseqno`, `operid`, `custid`, `custname`, `stuempno`, `srctable`, `barcode`, `status`, `wcstatus`, `errcode`, `remark`, `mac` from t_userdtl where accDate=%s;';
   }
   getShopBill(shopId, accDate) {
     return new Promise((resolve, reject) => {
@@ -81,7 +86,7 @@ class YktManager {
           resolve(null);
           return;
         }
-        const shopBills =  rows.map(row => ({
+        const shopBills = rows.map(row => ({
           shopId: row.shopId,
           shopName: row.shopName,
           accDate: row.accDate,
@@ -111,7 +116,7 @@ class YktManager {
           resolve(null);
           return;
         }
-        const shopBills =  rows.map(row => ({
+        const shopBills = rows.map(row => ({
           shopId: row.shopId,
           shopName: row.shopName,
           accDate: row.accDate,
@@ -427,7 +432,7 @@ class YktManager {
           resolve(null);
           return;
         }
-        const operatorBills =  rows.map(row => ({
+        const operatorBills = rows.map(row => ({
           primaryKey: row.primaryKey,
           accDate: row.accDate,
           operCode: row.operCode,
@@ -444,6 +449,7 @@ class YktManager {
       });
     });
   }
+
   getOperatorBillsByOperCodeAndAccDate(operCode, accDate) {
     return new Promise((resolve, reject) => {
       const queryOperatorBillsSqlBuild = util.format(this.queryOperatorBillsByOperCodeAndAccDateSql, mysql.escape(operCode), mysql.escape(accDate));
@@ -459,7 +465,7 @@ class YktManager {
           resolve(null);
           return;
         }
-        const operatorBills =  rows.map(row => ({
+        const operatorBills = rows.map(row => ({
           primaryKey: row.primaryKey,
           accDate: row.accDate,
           operCode: row.operCode,
@@ -476,6 +482,400 @@ class YktManager {
       });
     });
   }
+
+getOperatorBillsByOperCodeAndAccDate(operCode, accDate) {
+  return new Promise((resolve, reject) => {
+    const queryOperatorBillsSqlBuild = util.format(this.queryOperatorBillsByOperCodeAndAccDateSql, mysql.escape(operCode), mysql.escape(accDate));
+    info(`getOperatorBillsByOperCodeAndAccDate: Executing ${queryOperatorBillsSqlBuild}\n`);
+    this.pool.query(queryOperatorBillsSqlBuild, (err, rows) => {
+      if (err) {
+        error(`Error executing ${queryOperatorBillsSqlBuild}, with error ${err.stack}\n`);
+        reject(err);
+        return;
+      }
+      if (rows.length === 0) {
+        info(`Executing ${queryOperatorBillsSqlBuild} return empty result\n`);
+        resolve(null);
+        return;
+      }
+      const operatorBills = rows.map(row => ({
+        primaryKey: row.primaryKey,
+        accDate: row.accDate,
+        operCode: row.operCode,
+        operName: row.operName,
+        subjNo: row.subjNo,
+        subjName: row.subjName,
+        transType: row.transType,
+        summary: row.summary,
+        transCnt: row.transCnt,
+        inAmt: row.inAmt,
+        outAmt: row.outAmt
+      }));
+      resolve(operatorBills);
+    });
+  });
 }
 
+getCustCardInfo() {
+  return new Promise((resolve, reject) => {
+    const queryCustCardInfoSqlBuild = util.format(this.queryCustCardInfoSql);
+    info(`getCustCardInfo: Executing ${queryCustCardInfoSqlBuild}\n`);
+    this.pool.query(queryCustCardInfoSqlBuild, (err, rows) => {
+      if (err) {
+        error(`Error executing ${queryCustCardInfoSqlBuild}, with error ${err.stack}\n`);
+        reject(err);
+        return;
+      }
+      if (rows.length === 0) {
+        info(`Executing ${queryCustCardInfoSqlBuild} return empty result\n`);
+        resolve(null);
+        return;
+      }
+      const custCardInfos = rows.map(row => ({
+        stuempno: row.stuempno,
+        custname: row.custname,
+        cardno: row.cardno,
+        cardstatus: row.cardstatus,
+        balance: row.balance,
+        showcardno: row.showcardno,
+        cardphyid: row.cardphyid,
+        expiredate: row.expiredate,
+        opendate: row.opendate,
+        cardverno: row.cardverno,
+        cardtype: row.cardtype,
+        cardtypename: row.cardtypename,
+        custid: row.custid,
+        feetype: row.feetype,
+        feename: row.feename,
+        custtype: row.custtype,
+        custtypename: row.custtypename,
+        deptcode: row.deptcode,
+        deptname: row.deptname,
+        specialtycode: row.specialtycode,
+        specialtyname: row.specialtyname,
+        sex: row.sex,
+        idtype: row.idtype,
+        idtypename: row.idtypename,
+        idno: row.idno,
+        areacode: row.areacode,
+        areaname: row.areaname,
+        classcode: row.classcode,
+        countrycode: row.countrycode,
+        country: row.country,
+        email: row.email,
+        nationcode: row.nationcode,
+        nation: row.nation,
+        tel: row.tel,
+        mobile: row.mobile,
+        zipcode: row.zipcode,
+        cardupdtime: row.cardupdtime,
+        custupdtime: row.custupdtime,
+        STUEMPNO: row.STUEMPNO,
+        CUSTNAME: row.CUSTNAME,
+        CARDNO: row.CARDNO,
+        CARDSTATUS: row.CARDSTATUS,
+        BALANCE: row.BALANCE,
+        SHOWCARDNO: row.SHOWCARDNO,
+        CARDPHYID: row.CARDPHYID,
+        EXPIREDATE: row.EXPIREDATE,
+        OPENDATE: row.OPENDATE,
+        CARDVERNO: row.CARDVERNO,
+        CARDTYPE: row.CARDTYPE,
+        CARDTYPENAME: row.CARDTYPENAME,
+        CUSTID: row.CUSTID,
+        FEETYPE: row.FEETYPE,
+        FEENAME: row.FEENAME,
+        CUSTTYPE: row.CUSTTYPE,
+        CUSTTYPENAME: row.CUSTTYPENAME,
+        DEPTCODE: row.DEPTCODE,
+        DEPTNAME: row.DEPTNAME,
+        SPECIALTYCODE: row.SPECIALTYCODE,
+        SPECIALTYNAME: row.SPECIALTYNAME,
+        SEX: row.SEX,
+        IDTYPE: row.IDTYPE,
+        IDTYPENAME: row.IDTYPENAME,
+        IDNO: row.IDNO,
+        AREACODE: row.AREACODE,
+        AREANAME: row.AREANAME,
+        CLASSCODE: row.CLASSCODE,
+        COUNTRYCODE: row.COUNTRYCODE,
+        COUNTRY: row.COUNTRY,
+        EMAIL: row.EMAIL,
+        NATIONCODE: row.NATIONCODE,
+        NATION: row.NATION,
+        TEL: row.TEL,
+        MOBILE: row.MOBILE,
+        ZIPCODE: row.ZIPCODE,
+        CARDUPDTIME: row.CARDUPDTIME,
+        CUSTUPDTIME: row.CUSTUPDTIME,
+      }));
+      resolve(custCardInfos);
+    });
+  });
+}
+
+getCustCardInfoByStuempno(stuempno) {
+  return new Promise((resolve, reject) => {
+    const queryCustCardInfoByStuempnoSqlBuild = util.format(this.queryCustCardInfoByStuempnoSql, mysql.escape(stuempno));
+    info(`getCustCardInfoByStuempno: Executing ${queryCustCardInfoByStuempnoSqlBuild}\n`);
+    this.pool.query(queryCustCardInfoByStuempnoSqlBuild, (err, rows) => {
+      if (err) {
+        error(`Error executing ${queryCustCardInfoByStuempnoSqlBuild}, with error ${err.stack}\n`);
+        reject(err);
+        return;
+      }
+      if (rows.length === 0) {
+        info(`Executing ${queryCustCardInfoByStuempnoSqlBuild} return empty result\n`);
+        resolve(null);
+        return;
+      }
+      const custCardInfo = {
+        stuempno: rows[0].stuempno,
+        custname: rows[0].custname,
+        cardno: rows[0].cardno,
+        cardstatus: rows[0].cardstatus,
+        balance: rows[0].balance,
+        showcardno: rows[0].showcardno,
+        cardphyid: rows[0].cardphyid,
+        expiredate: rows[0].expiredate,
+        opendate: rows[0].opendate,
+        cardverno: rows[0].cardverno,
+        cardtype: rows[0].cardtype,
+        cardtypename: rows[0].cardtypename,
+        custid: rows[0].custid,
+        feetype: rows[0].feetype,
+        feename: rows[0].feename,
+        custtype: rows[0].custtype,
+        custtypename: rows[0].custtypename,
+        deptcode: rows[0].deptcode,
+        deptname: rows[0].deptname,
+        specialtycode: rows[0].specialtycode,
+        specialtyname: rows[0].specialtyname,
+        sex: rows[0].sex,
+        idtype: rows[0].idtype,
+        idtypename: rows[0].idtypename,
+        idno: rows[0].idno,
+        areacode: rows[0].areacode,
+        areaname: rows[0].areaname,
+        classcode: rows[0].classcode,
+        countrycode: rows[0].countrycode,
+        country: rows[0].country,
+        email: rows[0].email,
+        nationcode: rows[0].nationcode,
+        nation: rows[0].nation,
+        tel: rows[0].tel,
+        mobile: rows[0].mobile,
+        zipcode: rows[0].zipcode,
+        cardupdtime: rows[0].cardupdtime,
+        custupdtime: rows[0].custupdtime,
+        STUEMPNO: rows[0].STUEMPNO,
+        CUSTNAME: rows[0].CUSTNAME,
+        CARDNO: rows[0].CARDNO,
+        CARDSTATUS: rows[0].CARDSTATUS,
+        BALANCE: rows[0].BALANCE,
+        SHOWCARDNO: rows[0].SHOWCARDNO,
+        CARDPHYID: rows[0].CARDPHYID,
+        EXPIREDATE: rows[0].EXPIREDATE,
+        OPENDATE: rows[0].OPENDATE,
+        CARDVERNO: rows[0].CARDVERNO,
+        CARDTYPE: rows[0].CARDTYPE,
+        CARDTYPENAME: rows[0].CARDTYPENAME,
+        CUSTID: rows[0].CUSTID,
+        FEETYPE: rows[0].FEETYPE,
+        FEENAME: rows[0].FEENAME,
+        CUSTTYPE: rows[0].CUSTTYPE,
+        CUSTTYPENAME: rows[0].CUSTTYPENAME,
+        DEPTCODE: rows[0].DEPTCODE,
+        DEPTNAME: rows[0].DEPTNAME,
+        SPECIALTYCODE: rows[0].SPECIALTYCODE,
+        SPECIALTYNAME: rows[0].SPECIALTYNAME,
+        SEX: rows[0].SEX,
+        IDTYPE: rows[0].IDTYPE,
+        IDTYPENAME: rows[0].IDTYPENAME,
+        IDNO: rows[0].IDNO,
+        AREACODE: rows[0].AREACODE,
+        AREANAME: rows[0].AREANAME,
+        CLASSCODE: rows[0].CLASSCODE,
+        COUNTRYCODE: rows[0].COUNTRYCODE,
+        COUNTRY: rows[0].COUNTRY,
+        EMAIL: rows[0].EMAIL,
+        NATIONCODE: rows[0].NATIONCODE,
+        NATION: rows[0].NATION,
+        TEL: rows[0].TEL,
+        MOBILE: rows[0].MOBILE,
+        ZIPCODE: rows[0].ZIPCODE,
+        CARDUPDTIME: rows[0].CARDUPDTIME,
+        CUSTUPDTIME: rows[0].CUSTUPDTIME,
+      };
+      resolve(custCardInfo);
+    });
+  });
+}
+
+getUserDtl() {
+  return new Promise((resolve, reject) => {
+    const queryUserDtlSqlBuild = util.format(this.queryUserDtlSql);
+    info(`getCustCardInfo: Executing ${queryUserDtlSqlBuild}\n`);
+    this.pool.query(queryUserDtlSqlBuild, (err, rows) => {
+      if (err) {
+        error(`Error executing ${queryUserDtlSqlBuild}, with error ${err.stack}\n`);
+        reject(err);
+        return;
+      }
+      if (rows.length === 0) {
+        info(`Executing ${queryUserDtlSqlBuild} return empty result\n`);
+        resolve(null);
+        return;
+      }
+      const userDtls = rows.map(row => ({
+        accdate: row.accdate,
+        acctime: row.acctime,
+        refno: row.refno,
+        cardno: row.cardno,
+        termdate: row.termdate,
+        termtime: row.termtime,
+        beffrozebal: row.beffrozebal,
+        befavailbal: row.befavailbal,
+        aftavailbal: row.aftavailbal,
+        aftfrozebal: row.aftfrozebal,
+        amount: row.amount,
+        ispwdconfirm: row.ispwdconfirm,
+        managefee: row.managefee,
+        managefeetype: row.managefeetype,
+        revflag: row.revflag,
+        transcode: row.transcode,
+        transmode: row.transmode,
+        transtype: row.transtype,
+        transdesc: row.transdesc,
+        merchaccno: row.merchaccno,
+        termid: row.termid,
+        termseqno: row.termseqno,
+        operid: row.operid,
+        custid: row.custid,
+        custname: row.custname,
+        stuempno: row.stuempno,
+        srctable: row.srctable,
+        barcode: row.barcode,
+        status: row.status,
+        wcstatus: row.wcstatus,
+        errcode: row.errcode,
+        remark: row.remark,
+        mac: row.mac,
+      }));
+      resolve(userDtls);
+    });
+  });
+}
+
+getUserDtlByRefnoSql(refno) {
+  return new Promise((resolve, reject) => {
+    const queryUserDtlByRefnoSqlBuild = util.format(this.queryUserDtlByRefnoSql, mysql.escape(refno));
+    info(`getCustCardInfoByStuempno: Executing ${queryUserDtlByRefnoSqlBuild}\n`);
+    this.pool.query(queryUserDtlByRefnoSqlBuild, (err, rows) => {
+      if (err) {
+        error(`Error executing ${queryUserDtlByRefnoSqlBuild}, with error ${err.stack}\n`);
+        reject(err);
+        return;
+      }
+      if (rows.length === 0) {
+        info(`Executing ${queryUserDtlByRefnoSqlBuild} return empty result\n`);
+        resolve(null);
+        return;
+      }
+      const userDtl = {
+        accdate: rows[0].accdate,
+        acctime: rows[0].acctime,
+        refno: rows[0].refno,
+        cardno: rows[0].cardno,
+        termdate: rows[0].termdate,
+        termtime: rows[0].termtime,
+        beffrozebal: rows[0].beffrozebal,
+        befavailbal: rows[0].befavailbal,
+        aftavailbal: rows[0].aftavailbal,
+        aftfrozebal: rows[0].aftfrozebal,
+        amount: rows[0].amount,
+        ispwdconfirm: rows[0].ispwdconfirm,
+        managefee: rows[0].managefee,
+        managefeetype: rows[0].managefeetype,
+        revflag: rows[0].revflag,
+        transcode: rows[0].transcode,
+        transmode: rows[0].transmode,
+        transtype: rows[0].transtype,
+        transdesc: rows[0].transdesc,
+        merchaccno: rows[0].merchaccno,
+        termid: rows[0].termid,
+        termseqno: rows[0].termseqno,
+        operid: rows[0].operid,
+        custid: rows[0].custid,
+        custname: rows[0].custname,
+        stuempno: rows[0].stuempno,
+        srctable: rows[0].srctable,
+        barcode: rows[0].barcode,
+        status: rows[0].status,
+        wcstatus: rows[0].wcstatus,
+        errcode: rows[0].errcode,
+        remark: rows[0].remark,
+        mac: rows[0].mac,
+      };
+      resolve(userDtl);
+    });
+  });
+}
+
+getUserDtlByAccDate(accDate) {
+  return new Promise((resolve, reject) => {
+    const queryUserDtlByAccDateSqlBuild = util.format(this.queryUserDtlByAccDateSql, mysql.escape(accDate));
+    info(`getCustCardInfo: Executing ${queryUserDtlByAccDateSqlBuild}\n`);
+    this.pool.query(queryUserDtlByAccDateSqlBuild, (err, rows) => {
+      if (err) {
+        error(`Error executing ${queryUserDtlByAccDateSqlBuild}, with error ${err.stack}\n`);
+        reject(err);
+        return;
+      }
+      if (rows.length === 0) {
+        info(`Executing ${queryUserDtlByAccDateSqlBuild} return empty result\n`);
+        resolve(null);
+        return;
+      }
+      const userDtls = rows.map(row => ({
+        accdate: row.accdate,
+        acctime: row.acctime,
+        refno: row.refno,
+        cardno: row.cardno,
+        termdate: row.termdate,
+        termtime: row.termtime,
+        beffrozebal: row.beffrozebal,
+        befavailbal: row.befavailbal,
+        aftavailbal: row.aftavailbal,
+        aftfrozebal: row.aftfrozebal,
+        amount: row.amount,
+        ispwdconfirm: row.ispwdconfirm,
+        managefee: row.managefee,
+        managefeetype: row.managefeetype,
+        revflag: row.revflag,
+        transcode: row.transcode,
+        transmode: row.transmode,
+        transtype: row.transtype,
+        transdesc: row.transdesc,
+        merchaccno: row.merchaccno,
+        termid: row.termid,
+        termseqno: row.termseqno,
+        operid: row.operid,
+        custid: row.custid,
+        custname: row.custname,
+        stuempno: row.stuempno,
+        srctable: row.srctable,
+        barcode: row.barcode,
+        status: row.status,
+        wcstatus: row.wcstatus,
+        errcode: row.errcode,
+        remark: row.remark,
+        mac: row.mac,
+      }));
+      resolve(userDtls);
+    });
+  });
+}
+
+}
 export default YktManager;
