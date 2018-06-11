@@ -36,7 +36,7 @@ router.get('/all/', expressJwt(expressJwtOptions), async (req, res) => {
 });
 
 // 根据stuempno获取单个用户卡信息
-// GET /custcardinfo/:stuempno?token=TOKEN
+// GET /custcardinfo/by-stuempno/:stuempno?token=TOKEN
 router.get('/by-stuempno/:stuempno', expressJwt(expressJwtOptions), async (req, res) => {
   try {
     const stuempno = req.params.stuempno;
