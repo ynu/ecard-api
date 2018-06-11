@@ -20,5 +20,8 @@ RUN npm install
 # copy static resources to the specified location
 COPY . /app
 
-# main application command
-CMD npm start
+# build and start server in production
+RUN npm run build
+WORKDIR /app/dist
+RUN npm install
+CMD node index.js
