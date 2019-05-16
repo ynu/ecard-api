@@ -1,5 +1,5 @@
 # Set the base image to nginx
-FROM node:6.8.0
+FROM node
 
 # File Author / Maintainer
 MAINTAINER Liudonghua <liudonghua123@gmail.com>
