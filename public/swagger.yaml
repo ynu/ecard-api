@@ -13,7 +13,7 @@ info:
 
 # all paths will be relative to the basePath specified
 host:
-  - localhost:3000
+  - ecard-api.ynu.edu.cn
 basePath: ''
 
 schemes:
