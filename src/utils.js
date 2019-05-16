@@ -7,4 +7,4 @@ export const getToken = (req) => {
     return req.query.token;
   }
   return '';
-}
+};

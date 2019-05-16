@@ -4,24 +4,24 @@
 
 import { Router } from 'express';
 import expressJwt from 'express-jwt';
-import { getToken } from './utils'
+import { getToken } from './utils';
 import YktManager from './YktManager';
 
 import { database_connectionLimit, database_host, database_user, database_password, database_database, secret } from './config';
 
 const router = new Router();
 const yktManager = new YktManager({
-  connectionLimit : database_connectionLimit,
-  host            : database_host,
-  user            : database_user,
-  password        : database_password,
-  database        : database_database,
+  connectionLimit: database_connectionLimit,
+  host: database_host,
+  user: database_user,
+  password: database_password,
+  database: database_database,
 });
 
 const expressJwtOptions = {
-  secret: secret,
+  secret,
   credentialsRequired: true,
-  getToken: getToken
+  getToken,
 };
 
 // 获取所有用户详情信息

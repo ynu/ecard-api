@@ -12,11 +12,12 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 
 # all paths will be relative to the basePath specified
-host: ecard-api.ynu.edu.cn
-basePath: ""
+host:
+  - localhost:3000
+basePath: ''
 
 schemes:
- - http
+  - http
 
 securityDefinitions:
   token:
@@ -26,21 +27,21 @@ securityDefinitions:
 
 # tags are used for organizing operations
 tags:
-- name: shop
-  description: shop operation
-- name: operator
-  description: operator operation
+  - name: shop
+    description: shop operation
+  - name: operator
+    description: operator operation
 
 paths:
   /shop/all:
     get:
       tags:
-      - shop
+        - shop
       summary: 获取所有商户的信息
       operationId: getShops
       description: 获取所有商户的信息
       produces:
-      - application/json
+        - application/json
       parameters: []
       responses:
         200:
@@ -48,334 +49,414 @@ paths:
           schema:
             $ref: '#/definitions/ShopsResponse'
       security:
-      - token: []
+        - token: []
   /shop/{shopId}:
     get:
       tags:
-      - shop
+        - shop
       summary: 获取所有商户的信息
       operationId: getShop
       description: 获取所有商户的信息
       produces:
-      - application/json
+        - application/json
       parameters:
-      - in: path
-        name: shopId
-        description: 商户ID
-        required: true
-        type: string
+        - in: path
+          name: shopId
+          description: 商户ID
+          required: true
+          type: string
       responses:
         200:
           description: search results matching criteria
           schema:
             $ref: '#/definitions/ShopResponse'
       security:
-      - token: []
+        - token: []
   /shop/all/daily-bill/{accDate}:
     get:
       tags:
-      - shop
+        - shop
       summary: 获取指定日期所有商户的日账单
       operationId: getShopBillsByAccDate
       description: 获取指定日期所有商户的日账单
       produces:
-      - application/json
+        - application/json
       parameters:
-      - in: path
-        name: accDate
-        description: 时间
-        required: true
-        type: string
+        - in: path
+          name: accDate
+          description: 时间
+          required: true
+          type: string
       responses:
         200:
           description: search results matching criteria
           schema:
             $ref: '#/definitions/ShopBillsResponse'
       security:
-      - token: []
+        - token: []
   /shop/{shopId}/daily-bill/{accDate}:
     get:
       tags:
-      - shop
+        - shop
       summary: 获取指定商户单日账单
       operationId: getShopBill
       description: 获取指定商户单日账单
       produces:
-      - application/json
+        - application/json
       parameters:
-      - in: path
-        name: shopId
-        description: 商户ID
-        required: true
-        type: string
-      - in: path
-        name: accDate
-        description: 时间
-        required: true
-        type: string
+        - in: path
+          name: shopId
+          description: 商户ID
+          required: true
+          type: string
+        - in: path
+          name: accDate
+          description: 时间
+          required: true
+          type: string
       responses:
         200:
           description: search results matching criteria
           schema:
             $ref: '#/definitions/ShopBillResponse'
       security:
-      - token: []
+        - token: []
   /shop/{shopId}/daily-bill:
     get:
       tags:
-      - shop
+        - shop
       summary: 获取指定商户日账单列表
       operationId: getShopBillsByShopId
       description: 获取指定商户日账单列表
       produces:
-      - application/json
+        - application/json
       parameters:
-      - in: path
-        name: shopId
-        description: 商户ID
-        required: true
-        type: string
+        - in: path
+          name: shopId
+          description: 商户ID
+          required: true
+          type: string
       responses:
         200:
           description: search results matching criteria
           schema:
             $ref: '#/definitions/ShopBillsResponse'
       security:
-      - token: []
+        - token: []
   /shop/{fShopId}/sub-shop-daily-bills/{accDate}:
     get:
       tags:
-      - shop
+        - shop
       summary: 获取子商户单日账单列表
       operationId: getShopBills
       description: 获取子商户单日账单列表
       produces:
-      - application/json
+        - application/json
       parameters:
-      - in: path
-        name: fShopId
-        description: 父商户ID
-        required: true
-        type: string
-      - in: path
-        name: accDate
-        description: 时间
-        required: true
-        type: string
+        - in: path
+          name: fShopId
+          description: 父商户ID
+          required: true
+          type: string
+        - in: path
+          name: accDate
+          description: 时间
+          required: true
+          type: string
       responses:
         200:
           description: search results matching criteria
           schema:
             $ref: '#/definitions/ShopBillsResponse'
       security:
-      - token: []
+        - token: []
   /shop/{shopId}/device-daily-bills/{accDate}:
     get:
       tags:
-      - shop
+        - shop
       summary: 获取所属商户的设备的日账单列表
       operationId: getDeviceBills
       description: 获取所属商户的设备的日账单列表
       produces:
-      - application/json
+        - application/json
       parameters:
-      - in: path
-        name: shopId
-        description: 商户ID
-        required: true
-        type: string
-      - in: path
-        name: accDate
-        description: 时间
-        required: true
-        type: string
+        - in: path
+          name: shopId
+          description: 商户ID
+          required: true
+          type: string
+        - in: path
+          name: accDate
+          description: 时间
+          required: true
+          type: string
       responses:
         200:
           description: search results matching criteria
           schema:
             $ref: '#/definitions/DeviceBillsResponse'
       security:
-      - token: []
+        - token: []
   /shop/all/monthly-bill/{accDate}:
     get:
       tags:
-      - shop
+        - shop
       summary: 获取指定日期所有商户的月账单
       operationId: getShopBillsMonth
       description: 获取指定日期所有商户的月账单
       produces:
-      - application/json
+        - application/json
       parameters:
-      - in: path
-        name: accDate
-        description: 时间
-        required: true
-        type: string
+        - in: path
+          name: accDate
+          description: 时间
+          required: true
+          type: string
       responses:
         200:
           description: search results matching criteria
           schema:
             $ref: '#/definitions/ShopBillsMonthResponse'
       security:
-      - token: []
+        - token: []
   /shop/{shopId}/monthly-bill/{accDate}:
     get:
       tags:
-      - shop
+        - shop
       summary: 获取指定商户单月账单
       operationId: getShopBillMonth
       description: 获取指定商户单月账单
       produces:
-      - application/json
+        - application/json
       parameters:
-      - in: path
-        name: shopId
-        description: 商户ID
-        required: true
-        type: string
-      - in: path
-        name: accDate
-        description: 时间
-        required: true
-        type: string
+        - in: path
+          name: shopId
+          description: 商户ID
+          required: true
+          type: string
+        - in: path
+          name: accDate
+          description: 时间
+          required: true
+          type: string
       responses:
         200:
           description: search results matching criteria
           schema:
             $ref: '#/definitions/ShopBillMonthResponse'
       security:
-      - token: []
+        - token: []
   /shop/{fShopId}/sub-shop-monthly-bills/{accDate}:
     get:
       tags:
-      - shop
+        - shop
       summary: 获取子商户月账单列表
       operationId: getShopBillMonth2
       description: 获取子商户月账单列表
       produces:
-      - application/json
+        - application/json
       parameters:
-      - in: path
-        name: fShopId
-        description: 商户ID
-        required: true
-        type: string
-      - in: path
-        name: accDate
-        description: 时间
-        required: true
-        type: string
+        - in: path
+          name: fShopId
+          description: 商户ID
+          required: true
+          type: string
+        - in: path
+          name: accDate
+          description: 时间
+          required: true
+          type: string
       responses:
         200:
           description: search results matching criteria
           schema:
             $ref: '#/definitions/ShopBillsMonthResponse'
       security:
-      - token: []
+        - token: []
   /shop/{shopId}/device-monthly-bill/{accDate}:
     get:
       tags:
-      - shop
+        - shop
       summary: 获取所属商户的设备的月账单列表
       operationId: getDeviceBillsMonth
       description: 获取所属商户的设备的月账单列表
       produces:
-      - application/json
+        - application/json
       parameters:
-      - in: path
-        name: shopId
-        description: 商户ID
-        required: true
-        type: string
-      - in: path
-        name: accDate
-        description: 时间
-        required: true
-        type: string
+        - in: path
+          name: shopId
+          description: 商户ID
+          required: true
+          type: string
+        - in: path
+          name: accDate
+          description: 时间
+          required: true
+          type: string
       responses:
         200:
           description: search results matching criteria
           schema:
             $ref: '#/definitions/DeviceBillsMonthResponse'
       security:
-      - token: []
+        - token: []
   /shop/{shopId}/ancestors:
     get:
       tags:
-      - shop
+        - shop
       summary: 获取指定商户节点的所有祖先节点
       operationId: getAncestorShops
       description: 获取指定商户节点的所有祖先节点
       produces:
-      - application/json
+        - application/json
       parameters:
-      - in: path
-        name: shopId
-        description: 商户ID
-        required: true
-        type: string
+        - in: path
+          name: shopId
+          description: 商户ID
+          required: true
+          type: string
       responses:
         200:
           description: search results matching criteria
           schema:
             $ref: '#/definitions/ShopsResponse'
       security:
-      - token: []
+        - token: []
   /operator/all/daily-bill/{accDate}:
     get:
       tags:
-      - operator
+        - operator
       summary: 获取指定日期所有操作员的日账单
       operationId: getOperatorBillsByAccDate
       description: 获取指定日期所有操作员的日账单
       produces:
-      - application/json
+        - application/json
       parameters:
-      - in: path
-        name: accDate
-        description: 时间
-        required: true
-        type: string
+        - in: path
+          name: accDate
+          description: 时间
+          required: true
+          type: string
       responses:
         200:
           description: search results matching criteria
           schema:
             $ref: '#/definitions/OperatorBillsResponse'
       security:
-      - token: []
+        - token: []
   /operator/{operatorCode}/daily-bill/{accDate}:
     get:
       tags:
-      - operator
+        - operator
       summary: 获取指定操作员单日账单
       operationId: getOperatorBillsByOperCodeAndAccDate
       description: 获取指定操作员单日账单
       produces:
-      - application/json
+        - application/json
       parameters:
-      - in: path
-        name: operatorCode
-        description:  操作Code
-        required: true
-        type: string
-      - in: path
-        name: accDate
-        description: 时间
-        required: true
-        type: string
+        - in: path
+          name: operatorCode
+          description: 操作Code
+          required: true
+          type: string
+        - in: path
+          name: accDate
+          description: 时间
+          required: true
+          type: string
       responses:
         200:
           description: search results matching criteria
           schema:
             $ref: '#/definitions/OperatorBillsResponse'
       security:
-      - token: []
+        - token: []
+  /device/all-deviceid:
+    get:
+      tags:
+        - device
+      summary: 获取所有卡信息deviceid
+      operationId: getAllDeviceid
+      description: 获取所有卡信息deviceid
+      produces:
+        - application/json
+      parameters: []
+      responses:
+        200:
+          description: 获取所有卡信息deviceid
+          schema:
+            $ref: '#/definitions/DeviceidsResponse'
+      security:
+        - token: []
+  /device/by-deviceid/{deviceid}:
+    get:
+      tags:
+        - device
+      summary: 获取所有商户的信息
+      operationId: getDeviceByDeviceid
+      description: 获取所有商户的信息
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: deviceid
+          description: 设备id
+          required: true
+          type: string
+      responses:
+        200:
+          description: search results matching criteria
+          schema:
+            $ref: '#/definitions/DeviceResponse'
+      security:
+        - token: []
+
+  /custcardinfo/all-stuempno:
+    get:
+      tags:
+        - custcardinfo
+      summary: 获取所有的用户卡stuempno信息
+      operationId: getCustCardInfoStuempnos
+      description: 获取所有的用户卡stuempno信息
+      produces:
+        - application/json
+      parameters: []
+      responses:
+        200:
+          description: 获取所有的用户卡stuempno信息
+          schema:
+            $ref: '#/definitions/CustCardidsResponse'
+      security:
+        - token: []
+  /custcardinfo/by-stuempno/{stuempno}:
+    get:
+      tags:
+        - custcardinfo
+      summary: 根据stuempno获取单个用户卡信息
+      operationId: getCustCardInfoByStuempno
+      description: 根据stuempno获取单个用户卡信息
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: stuempno
+          description: 卡id
+          required: true
+          type: string
+      responses:
+        200:
+          description: search results matching criteria
+          schema:
+            $ref: '#/definitions/CustCardResponse'
+      security:
+        - token: []
+
 definitions:
   ShopBillResponse:
     type: object
     required:
-    - ret
-    - data
+      - ret
+      - data
     properties:
       ret:
         type: integer
@@ -384,8 +465,8 @@ definitions:
   ShopBillsResponse:
     type: object
     required:
-    - ret
-    - data
+      - ret
+      - data
     properties:
       ret:
         type: integer
@@ -396,8 +477,8 @@ definitions:
   DeviceBillResponse:
     type: object
     required:
-    - ret
-    - data
+      - ret
+      - data
     properties:
       ret:
         type: integer
@@ -406,8 +487,8 @@ definitions:
   DeviceBillsResponse:
     type: object
     required:
-    - ret
-    - data
+      - ret
+      - data
     properties:
       ret:
         type: integer
@@ -418,18 +499,62 @@ definitions:
   ShopResponse:
     type: object
     required:
-    - ret
-    - data
+      - ret
+      - data
     properties:
       ret:
         type: integer
       data:
         $ref: '#/definitions/Shop'
+  CustCardidsResponse:
+    type: object
+    required:
+      - ret
+      - data
+    properties:
+      ret:
+        type: integer
+      data:
+        type: array
+        items:
+          type: integer
+  CustCardResponse:
+    type: object
+    required:
+      - ret
+      - data
+    properties:
+      ret:
+        type: integer
+      data:
+        $ref: '#/definitions/CustCard'
+  DeviceidsResponse:
+    type: object
+    required:
+      - ret
+      - data
+    properties:
+      ret:
+        type: integer
+      data:
+        type: array
+        items:
+          type: integer
+  DeviceResponse:
+    type: object
+    required:
+      - ret
+      - data
+    properties:
+      ret:
+        type: integer
+      data:
+        $ref: '#/definitions/Device'
   ShopsResponse:
     type: object
     required:
-    - ret
-    - data
+      - ret
+      - data
     properties:
       ret:
         type: integer
@@ -437,21 +562,11 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/Shop'
-  DeviceResponse:
-    type: object
-    required:
-    - ret
-    - data
-    properties:
-      ret:
-        type: integer
-      data:
-        $ref: '#/definitions/Device'
   DevicesResponse:
     type: object
     required:
-    - ret
-    - data
+      - ret
+      - data
     properties:
       ret:
         type: integer
@@ -462,8 +577,8 @@ definitions:
   OperatorBillResponse:
     type: object
     required:
-    - ret
-    - data
+      - ret
+      - data
     properties:
       ret:
         type: integer
@@ -472,8 +587,8 @@ definitions:
   OperatorBillsResponse:
     type: object
     required:
-    - ret
-    - data
+      - ret
+      - data
     properties:
       ret:
         type: integer
@@ -484,8 +599,8 @@ definitions:
   ShopBillMonthResponse:
     type: object
     required:
-    - ret
-    - data
+      - ret
+      - data
     properties:
       ret:
         type: integer
@@ -494,8 +609,8 @@ definitions:
   ShopBillsMonthResponse:
     type: object
     required:
-    - ret
-    - data
+      - ret
+      - data
     properties:
       ret:
         type: integer
@@ -506,8 +621,8 @@ definitions:
   DeviceBillMonthResponse:
     type: object
     required:
-    - ret
-    - data
+      - ret
+      - data
     properties:
       ret:
         type: integer
@@ -516,8 +631,8 @@ definitions:
   DeviceBillsMonthResponse:
     type: object
     required:
-    - ret
-    - data
+      - ret
+      - data
     properties:
       ret:
         type: integer
@@ -527,301 +642,414 @@ definitions:
           $ref: '#/definitions/DeviceBillMonth'
   ShopBill:
     required:
-    - shopId
-    - shopName
-    - accDate
-    - transCnt
-    - drAmt
-    - crAmt
-    - level1
-    - fShopId
-    - shopName2
+      - shopId
+      - shopName
+      - accDate
+      - transCnt
+      - drAmt
+      - crAmt
+      - level1
+      - fShopId
+      - shopName2
     properties:
       shopId:
         type: string
-        example: ""
+        example: ''
       shopName:
         type: string
-        example: ""
+        example: ''
       accDate:
         type: string
-        example: ""
+        example: ''
       transCnt:
         type: string
-        example: ""
+        example: ''
       drAmt:
         type: string
-        example: ""
+        example: ''
       crAmt:
         type: string
-        example: ""
+        example: ''
       level1:
         type: string
-        example: ""
+        example: ''
       fShopId:
         type: string
-        example: ""
+        example: ''
       shopName2:
         type: string
-        example: ""
+        example: ''
   DeviceBill:
     required:
-    - deviceId
-    - deviceName
-    - accDate
-    - transCnt
-    - drAmt
-    - crAmt
-    - fShopId
-    - shopId
-    - accNo
-    - shopName
-    - deviceNo
-    - devPyhId
+      - deviceId
+      - deviceName
+      - accDate
+      - transCnt
+      - drAmt
+      - crAmt
+      - fShopId
+      - shopId
+      - accNo
+      - shopName
+      - deviceNo
+      - devPyhId
     properties:
       deviceId:
         type: string
-        example: ""
+        example: ''
       deviceName:
         type: string
-        example: ""
+        example: ''
       accDate:
         type: string
-        example: ""
+        example: ''
       transCnt:
         type: string
-        example: ""
+        example: ''
       drAmt:
         type: string
-        example: ""
+        example: ''
       crAmt:
         type: string
-        example: ""
+        example: ''
       fShopId:
         type: string
-        example: ""
+        example: ''
       shopId:
         type: string
-        example: ""
+        example: ''
       accNo:
         type: string
-        example: ""
+        example: ''
       shopName:
         type: string
-        example: ""
+        example: ''
       deviceNo:
         type: string
-        example: ""
+        example: ''
       devPyhId:
         type: string
-        example: ""
+        example: ''
   Device:
     required:
-    - deviceId
-    - deviceName
-    - fDeviceId
-    - devPhyId
-    - deviceNo
-    - devPhyType
-    - devTypeCode
-    - devVerNo
-    - status
+      - deviceId
+      - deviceName
+      - fDeviceId
+      - devPhyId
+      - deviceNo
+      - devPhyType
+      - devTypeCode
+      - devVerNo
+      - status
     properties:
       deviceId:
         type: string
-        example: ""
+        example: ''
       deviceName:
         type: string
-        example: ""
+        example: ''
       fDeviceId:
         type: string
-        example: ""
+        example: ''
       devPhyId:
         type: string
-        example: ""
+        example: ''
       deviceNo:
         type: string
-        example: ""
+        example: ''
       devPhyType:
         type: string
-        example: ""
+        example: ''
       devTypeCode:
         type: string
-        example: ""
+        example: ''
       devVerNo:
         type: string
-        example: ""
+        example: ''
       status:
         type: string
-        example: ""
+        example: ''
   Shop:
     required:
-    - shopId
-    - shopName
-    - fShopId
-    - areaCode
-    - shopType
-    - accFlag
-    - status
-    - accNo
+      - shopId
+      - shopName
+      - fShopId
+      - areaCode
+      - shopType
+      - accFlag
+      - status
+      - accNo
     properties:
       shopId:
         type: string
-        example: ""
+        example: ''
       shopName:
         type: string
-        example: ""
+        example: ''
       fShopId:
         type: string
-        example: ""
+        example: ''
       areaCode:
         type: string
-        example: ""
+        example: ''
       shopType:
         type: string
-        example: ""
+        example: ''
       accFlag:
         type: string
-        example: ""
+        example: ''
       status:
         type: string
-        example: ""
+        example: ''
       accNo:
         type: string
-        example: ""
+        example: ''
   ShopBillMonth:
     required:
-    - shopId
-    - shopName
-    - accDate
-    - transCnt
-    - drAmt
-    - crAmt
-    - rn
-    - l1
-    - fShopId
-    - shopName2
+      - shopId
+      - shopName
+      - accDate
+      - transCnt
+      - drAmt
+      - crAmt
+      - rn
+      - l1
+      - fShopId
+      - shopName2
     properties:
       shopId:
         type: string
-        example: ""
+        example: ''
       shopName:
         type: string
-        example: ""
+        example: ''
       accDate:
         type: string
-        example: ""
+        example: ''
       transCnt:
         type: string
-        example: ""
+        example: ''
       drAmt:
         type: string
-        example: ""
+        example: ''
       crAmt:
         type: string
-        example: ""
+        example: ''
       rn:
         type: string
-        example: ""
+        example: ''
       l1:
         type: string
-        example: ""
+        example: ''
       fShopId:
         type: string
-        example: ""
+        example: ''
       shopName2:
         type: string
-        example: ""
+        example: ''
   DeviceBillMonth:
     required:
-    - shopId
-    - shopName
-    - accDate
-    - transCnt
-    - drAmt
-    - crAmt
-    - rn
-    - l1
-    - fShopId
-    - shopName2
+      - shopId
+      - shopName
+      - accDate
+      - transCnt
+      - drAmt
+      - crAmt
+      - rn
+      - l1
+      - fShopId
+      - shopName2
     properties:
       shopId:
         type: string
-        example: ""
+        example: ''
       shopName:
         type: string
-        example: ""
+        example: ''
       accDate:
         type: string
-        example: ""
+        example: ''
       transCnt:
         type: string
-        example: ""
+        example: ''
       drAmt:
         type: string
-        example: ""
+        example: ''
       crAmt:
         type: string
-        example: ""
+        example: ''
       rn:
         type: string
-        example: ""
+        example: ''
       l1:
         type: string
-        example: ""
+        example: ''
       fShopId:
         type: string
-        example: ""
+        example: ''
       shopName2:
         type: string
-        example: ""
+        example: ''
   OperatorBill:
     required:
-    - primaryKey
-    - accDate
-    - operCode
-    - operName
-    - subjNo
-    - subjName
-    - transType
-    - summary
-    - transCnt
-    - inAmt
-    - outAmt
+      - primaryKey
+      - accDate
+      - operCode
+      - operName
+      - subjNo
+      - subjName
+      - transType
+      - summary
+      - transCnt
+      - inAmt
+      - outAmt
     properties:
       primaryKey:
         type: string
-        example: ""
+        example: ''
       accDate:
         type: string
-        example: ""
+        example: ''
       operCode:
         type: string
-        example: ""
+        example: ''
       operName:
         type: string
-        example: ""
+        example: ''
       subjNo:
         type: string
-        example: ""
+        example: ''
       subjName:
         type: string
-        example: ""
+        example: ''
       transType:
         type: string
-        example: ""
+        example: ''
       summary:
         type: string
-        example: ""
+        example: ''
       transCnt:
         type: string
-        example: ""
+        example: ''
       inAmt:
         type: string
-        example: ""
+        example: ''
       outAmt:
         type: string
-        example: ""
-# Added by API Auto Mocking Plugin
-#host: virtserver.swaggerhub.com
-#basePath: /ynu/ecard-api/1.0.0
+        example: ''
+  CustCard:
+    properties:
+      stuempno:
+        type: string
+        example: ''
+      custname:
+        type: string
+        example: ''
+      cardno:
+        type: string
+        example: ''
+      cardstatus:
+        type: string
+        example: ''
+      balance:
+        type: string
+        example: ''
+      showcardno:
+        type: string
+        example: ''
+      cardphyid:
+        type: string
+        example: ''
+      expiredate:
+        type: string
+        example: ''
+      opendate:
+        type: string
+        example: ''
+      cardverno:
+        type: string
+        example: ''
+      cardtype:
+        type: string
+        example: ''
+      cardtypename:
+        type: string
+        example: ''
+      custid:
+        type: string
+        example: ''
+      feetype:
+        type: string
+        example: ''
+      feename:
+        type: string
+        example: ''
+      custtype:
+        type: string
+        example: ''
+      custtypename:
+        type: string
+        example: ''
+      deptcode:
+        type: string
+        example: ''
+      deptname:
+        type: string
+        example: ''
+      specialtycode:
+        type: string
+        example: ''
+      specialtyname:
+        type: string
+        example: ''
+      sex:
+        type: string
+        example: ''
+      idtype:
+        type: string
+        example: ''
+      idtypename:
+        type: string
+        example: ''
+      idno:
+        type: string
+        example: ''
+      areacode:
+        type: string
+        example: ''
+      areaname:
+        type: string
+        example: ''
+      classcode:
+        type: string
+        example: ''
+      countrycode:
+        type: string
+        example: ''
+      country:
+        type: string
+        example: ''
+      email:
+        type: string
+        example: ''
+      nationcode:
+        type: string
+        example: ''
+      nation:
+        type: string
+        example: ''
+      tel:
+        type: string
+        example: ''
+      mobile:
+        type: string
+        example: ''
+      zipcode:
+        type: string
+        example: ''
+      cardupdtime:
+        type: string
+        example: ''
+      custupdtime:
+        type: string
+        example: ''

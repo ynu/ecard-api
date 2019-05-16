@@ -4,24 +4,31 @@
 
 import { Router } from 'express';
 import expressJwt from 'express-jwt';
-import { getToken } from './utils'
+import { getToken } from './utils';
 import YktManager from './YktManager';
 
-import { database_connectionLimit, database_host, database_user, database_password, database_database, secret } from './config';
+import {
+  database_connectionLimit,
+  database_host,
+  database_user,
+  database_password,
+  database_database,
+  secret,
+} from './config';
 
 const router = new Router();
 const yktManager = new YktManager({
-  connectionLimit : database_connectionLimit,
-  host            : database_host,
-  user            : database_user,
-  password        : database_password,
-  database        : database_database,
+  connectionLimit: database_connectionLimit,
+  host: database_host,
+  user: database_user,
+  password: database_password,
+  database: database_database,
 });
 
 const expressJwtOptions = {
-  secret: secret,
+  secret,
   credentialsRequired: true,
-  getToken: getToken
+  getToken,
 };
 
 // 获取所有的用户卡信息
@@ -30,6 +37,17 @@ router.get('/all/', expressJwt(expressJwtOptions), async (req, res) => {
   try {
     const custCardInfos = await yktManager.getCustCardInfo();
     res.json({ ret: 0, data: custCardInfos });
+  } catch (err) {
+    res.json({ ret: 500, data: err });
+  }
+});
+
+// 获取所有的用户卡stuempno信息
+// GET /custcardinfo/all-stuempno/?token=TOKEN
+router.get('/all-stuempno/', expressJwt(expressJwtOptions), async (req, res) => {
+  try {
+    const custCardInfoStuempnos = await yktManager.getCustCardInfoStuempnos();
+    res.json({ ret: 0, data: custCardInfoStuempnos });
   } catch (err) {
     res.json({ ret: 500, data: err });
   }

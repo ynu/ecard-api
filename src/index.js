@@ -19,6 +19,7 @@ import shop from './shop';
 import operator from './operator';
 import custcardinfo from './custcardinfo';
 import userdtl from './userdtl';
+import device from './device';
 
 const app = express();
 
@@ -33,6 +34,7 @@ app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(express.static(path.resolve(path.join(__dirname, '../public'))));
 
 const morgan = require('morgan');
+
 app.use(morgan('dev'));
 
 /*
@@ -42,6 +44,7 @@ app.use('/shop', shop);
 app.use('/operator', operator);
 app.use('/custcardinfo', custcardinfo);
 app.use('/userdtl', userdtl);
+app.use('/device', device);
 
 /*
  处理异常
