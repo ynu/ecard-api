@@ -66,6 +66,10 @@ class YktManager {
     this.queryDeviceidSql = 'select `deviceid` from t_device;';
     this.queryDeviceByDeviceidSql =
       'select `fdeviceid`, `deviceid`, `devicename`, `devphyid`, `deviceno`, `devphytype`, `devtypecode`, `devverno`, `status` from `t_device` where deviceid=%s;';
+    this.queryDeviceSummarySql =
+      'select count(`deviceid`) as count_of_deviceid, max(convert(`deviceid`, signed integer)) as max_of_deviceid from t_device;';
+    this.queryCustCardInfoSummarySql =
+      'select count(`stuempno`) as count_of_stuempno from t_custcardinfo;';
   }
   getShopBill(shopId, accDate) {
     return new Promise((resolve, reject) => {
@@ -649,6 +653,26 @@ class YktManager {
     });
   }
 
+  getCustCardInfoSummary() {
+    return new Promise((resolve, reject) => {
+      const queryCustCardInfoSummarySqlBuild = util.format(this.queryCustCardInfoSummarySql);
+      info(`getCustCardInfoStuempnos: Executing ${queryCustCardInfoSummarySqlBuild}\n`);
+      this.pool.query(queryCustCardInfoSummarySqlBuild, (err, rows) => {
+        if (err) {
+          error(`Error executing ${queryCustCardInfoSummarySqlBuild}, with error ${err.stack}\n`);
+          reject(err);
+          return;
+        }
+        if (rows.length === 0) {
+          info(`Executing ${queryCustCardInfoSummarySqlBuild} return empty result\n`);
+          resolve(null);
+          return;
+        }
+        resolve(rows);
+      });
+    });
+  }
+
   getCustCardInfoByStuempno(stuempno) {
     return new Promise((resolve, reject) => {
       const queryCustCardInfoByStuempnoSqlBuild = util.format(
@@ -731,6 +755,26 @@ class YktManager {
         }
         const deviceids = rows.map(row => row.deviceid);
         resolve(deviceids);
+      });
+    });
+  }
+
+  getDeviceSummary() {
+    return new Promise((resolve, reject) => {
+      const queryDeviceSummarySqlBuild = util.format(this.queryDeviceSummarySql);
+      info(`getAllDeviceid: Executing ${queryDeviceSummarySqlBuild}\n`);
+      this.pool.query(queryDeviceSummarySqlBuild, (err, rows) => {
+        if (err) {
+          error(`Error executing ${queryDeviceSummarySqlBuild}, with error ${err.stack}\n`);
+          reject(err);
+          return;
+        }
+        if (rows.length === 0) {
+          info(`Executing ${queryDeviceSummarySqlBuild} return empty result\n`);
+          resolve(null);
+          return;
+        }
+        resolve(rows);
       });
     });
   }

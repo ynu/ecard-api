@@ -378,25 +378,41 @@ paths:
     get:
       tags:
         - device
-      summary: 获取所有卡信息deviceid
+      summary: 获取所有设备信息deviceid
       operationId: getAllDeviceid
-      description: 获取所有卡信息deviceid
+      description: 获取所有设备信息deviceid
       responses:
         '200':
-          description: 获取所有卡信息deviceid
+          description: 获取所有设备信息deviceid
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/DeviceidsResponse'
       security:
         - token: []
+  /device/summary:
+    get:
+      tags:
+        - device
+      summary: 获取设备信息概要
+      operationId: getDeviceSummary
+      description: 获取设备信息概要
+      responses:
+        '200':
+          description: 获取设备信息概要
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeviceSummaryResponse'
+      security:
+        - token: []
   '/device/by-deviceid/{deviceid}':
     get:
       tags:
         - device
-      summary: 获取所有商户的信息
+      summary: 根据指定deviceid获取单个卡详情
       operationId: getDeviceByDeviceid
-      description: 获取所有商户的信息
+      description: 根据指定deviceid获取单个卡详情
       parameters:
         - in: path
           name: deviceid
@@ -406,7 +422,7 @@ paths:
             type: string
       responses:
         '200':
-          description: search results matching criteria
+          description: 根据指定deviceid获取单个卡详情
           content:
             application/json:
               schema:
@@ -427,6 +443,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CustCardidsResponse'
+      security:
+        - token: []
+  /custcardinfo/summary:
+    get:
+      tags:
+        - custcardinfo
+      summary: 获取卡信息概要
+      operationId: getCustCardInfoSummary
+      description: 获取卡信息概要
+      responses:
+        '200':
+          description: 获取卡信息概要
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustCardInfoSummaryResponse'
       security:
         - token: []
   '/custcardinfo/by-stuempno/{stuempno}':
@@ -525,6 +557,16 @@ components:
           type: array
           items:
             type: integer
+    CustCardInfoSummaryResponse:
+      type: object
+      required:
+        - ret
+        - data
+      properties:
+        ret:
+          type: integer
+        data:
+          type: object
     CustCardResponse:
       type: object
       required:
@@ -547,6 +589,16 @@ components:
           type: array
           items:
             type: integer
+    DeviceSummaryResponse:
+      type: object
+      required:
+        - ret
+        - data
+      properties:
+        ret:
+          type: integer
+        data:
+          type: object
     DeviceResponse:
       type: object
       required:

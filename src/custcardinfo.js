@@ -53,6 +53,17 @@ router.get('/all-stuempno/', expressJwt(expressJwtOptions), async (req, res) => 
   }
 });
 
+// 获取卡信息概要
+// GET /custcardinfo/summary?token=TOKEN
+router.get('/summary', expressJwt(expressJwtOptions), async (req, res) => {
+  try {
+    const summary = await yktManager.getCustCardInfoSummary();
+    res.json({ ret: 0, data: summary });
+  } catch (err) {
+    res.json({ ret: 500, data: err });
+  }
+});
+
 // 根据stuempno获取单个用户卡信息
 // GET /custcardinfo/by-stuempno/:stuempno?token=TOKEN
 router.get('/by-stuempno/:stuempno', expressJwt(expressJwtOptions), async (req, res) => {

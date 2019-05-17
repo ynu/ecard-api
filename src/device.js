@@ -31,12 +31,23 @@ const expressJwtOptions = {
   getToken,
 };
 
-// 获取所有卡信息deviceid
+// 获取所有设备信息deviceid
 // GET /device/all-deviceid/?token=TOKEN
 router.get('/all-deviceid/', expressJwt(expressJwtOptions), async (req, res) => {
   try {
     const deviceids = await yktManager.getAllDeviceid();
     res.json({ ret: 0, data: deviceids });
+  } catch (err) {
+    res.json({ ret: 500, data: err });
+  }
+});
+
+// 获取设备信息概要
+// GET /device/summary?token=TOKEN
+router.get('/summary', expressJwt(expressJwtOptions), async (req, res) => {
+  try {
+    const summary = await yktManager.getDeviceSummary();
+    res.json({ ret: 0, data: summary });
   } catch (err) {
     res.json({ ret: 500, data: err });
   }
