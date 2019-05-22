@@ -241,6 +241,29 @@ paths:
                 $ref: '#/components/schemas/ShopBillMonthResponse'
       security:
         - token: []
+  '/shop/{shopId}/monthly-bill/':
+    get:
+      tags:
+        - shop
+      summary: 获取指定商户月账单列表
+      operationId: getShopBillMonth3
+      description: 获取指定商户月账单列表
+      parameters:
+        - in: path
+          name: shopId
+          description: 商户ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShopBillMonthResponse'
+      security:
+        - token: []
   '/shop/{fShopId}/sub-shop-monthly-bills/{accDate}':
     get:
       tags:

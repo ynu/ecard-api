@@ -7,7 +7,14 @@ import expressJwt from 'express-jwt';
 import { getToken } from './utils';
 import YktManager from './YktManager';
 
-import { database_connectionLimit, database_host, database_user, database_password, database_database, secret } from './config';
+import {
+  database_connectionLimit,
+  database_host,
+  database_user,
+  database_password,
+  database_database,
+  secret,
+} from './config';
 
 const router = new Router();
 const yktManager = new YktManager({
@@ -86,29 +93,37 @@ router.get('/:shopId/daily-bill', expressJwt(expressJwtOptions), async (req, res
 
 // 获取子商户单日账单列表
 // GET /shop/:fShopId/sub-shop-daily-bills/:accDate?token=TOKEN
-router.get('/:fShopId/sub-shop-daily-bills/:accDate', expressJwt(expressJwtOptions), async (req, res) => {
-  try {
-    const fShopId = req.params.fShopId;
-    const accDate = req.params.accDate;
-    const shopBills = await yktManager.getShopBills(fShopId, accDate);
-    res.json({ ret: 0, data: shopBills });
-  } catch (err) {
-    res.json({ ret: 500, data: err });
+router.get(
+  '/:fShopId/sub-shop-daily-bills/:accDate',
+  expressJwt(expressJwtOptions),
+  async (req, res) => {
+    try {
+      const fShopId = req.params.fShopId;
+      const accDate = req.params.accDate;
+      const shopBills = await yktManager.getShopBills(fShopId, accDate);
+      res.json({ ret: 0, data: shopBills });
+    } catch (err) {
+      res.json({ ret: 500, data: err });
+    }
   }
-});
+);
 
 // 获取所属商户的设备的日账单列表
 // GET /shop/:shopId/device-daily-bills/:accDate?token=TOKEN
-router.get('/:shopId/device-daily-bills/:accDate', expressJwt(expressJwtOptions), async (req, res) => {
-  try {
-    const shopId = req.params.shopId;
-    const accDate = req.params.accDate;
-    const deviceBills = await yktManager.getDeviceBills(shopId, accDate);
-    res.json({ ret: 0, data: deviceBills });
-  } catch (err) {
-    res.json({ ret: 500, data: err });
+router.get(
+  '/:shopId/device-daily-bills/:accDate',
+  expressJwt(expressJwtOptions),
+  async (req, res) => {
+    try {
+      const shopId = req.params.shopId;
+      const accDate = req.params.accDate;
+      const deviceBills = await yktManager.getDeviceBills(shopId, accDate);
+      res.json({ ret: 0, data: deviceBills });
+    } catch (err) {
+      res.json({ ret: 500, data: err });
+    }
   }
-});
+);
 
 // 获取指定日期所有商户的月账单
 // GET /shop/all/monthly-bill/:accDate?token=TOKEN
@@ -135,32 +150,52 @@ router.get('/:shopId/monthly-bill/:accDate', expressJwt(expressJwtOptions), asyn
   }
 });
 
-// 获取子商户月账单列表
-// GET /shop/:fShopId/sub-shop-monthly-bills/:accDate?token=TOKEN
-router.get('/:fShopId/sub-shop-monthly-bills/:accDate', expressJwt(expressJwtOptions), async (req, res) => {
+// 获取指定商户月账单列表
+// GET /shop/:shopId/monthly-bill/?token=TOKEN
+router.get('/:shopId/monthly-bill/', expressJwt(expressJwtOptions), async (req, res) => {
   try {
-    const fShopId = req.params.fShopId;
-    const accDate = req.params.accDate;
-    const shopBillsMonth = await yktManager.getShopBillsMonth(fShopId, accDate);
-    res.json({ ret: 0, data: shopBillsMonth });
+    const shopId = req.params.shopId;
+    const shopBillMonth = await yktManager.getShopBillMonth(shopId, null);
+    res.json({ ret: 0, data: shopBillMonth });
   } catch (err) {
     res.json({ ret: 500, data: err });
   }
 });
 
+// 获取子商户月账单列表
+// GET /shop/:fShopId/sub-shop-monthly-bills/:accDate?token=TOKEN
+router.get(
+  '/:fShopId/sub-shop-monthly-bills/:accDate',
+  expressJwt(expressJwtOptions),
+  async (req, res) => {
+    try {
+      const fShopId = req.params.fShopId;
+      const accDate = req.params.accDate;
+      const shopBillsMonth = await yktManager.getShopBillsMonth(fShopId, accDate);
+      res.json({ ret: 0, data: shopBillsMonth });
+    } catch (err) {
+      res.json({ ret: 500, data: err });
+    }
+  }
+);
+
 // 获取所属商户的设备的月账单列表
 // GET /shop/:shopId/device-monthly-bills/:accDate?token=TOKEN
-router.get('/:shopId/device-monthly-bill/:accDate', expressJwt(expressJwtOptions), async (req, res) => {
-  try {
-    const shopId = req.params.shopId;
-    const accDate = req.params.accDate;
-    // const deviceBills = await yktManager.getDeviceBillsMonth(shopId, accDate);
-    const deviceBills = {};
-    res.json({ ret: 0, data: deviceBills });
-  } catch (err) {
-    res.json({ ret: 500, data: err });
+router.get(
+  '/:shopId/device-monthly-bill/:accDate',
+  expressJwt(expressJwtOptions),
+  async (req, res) => {
+    try {
+      const shopId = req.params.shopId;
+      const accDate = req.params.accDate;
+      // const deviceBills = await yktManager.getDeviceBillsMonth(shopId, accDate);
+      const deviceBills = {};
+      res.json({ ret: 0, data: deviceBills });
+    } catch (err) {
+      res.json({ ret: 500, data: err });
+    }
   }
-});
+);
 
 // 获取指定商户节点的所有祖先节点
 // GET /shop/:shopId/ancestors?token=TOKEN

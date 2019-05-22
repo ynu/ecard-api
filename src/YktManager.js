@@ -42,11 +42,17 @@ class YktManager {
       'select shopid as shopId, shopname as shopName, accdate as accDate, transcnt as transCnt, dramt as drAmt, cramt as crAmt, level1 as level1, fshopid as fShopId, shopname2 as shopName2 from t_shop_bill where accDate=%s and fshopid=%s;';
     this.queryDeviceBillsByShopIdSql =
       'select deviceid as deviceId, devicename as deviceName, accdate as accDate, transcnt as transCnt, dramt as drAmt, cramt as crAmt, fshopid as fShopId, shopid as shopId, accno as accNo, shopname as shopName, deviceno as deviceNo, devphyid as devPyhId from t_shopdevice_bill where accdate=%s and shopid=%s;';
-    this.queryShopBillMonthSql =
-      'select accdate as accDate, rn as rn, l1 as l1, fshopid as fShopId, shopid as shopId, shopname2 as shopName2, shopname as shopName, transcnt as transCnt, drmant as drAmt, cramt as crAmt from t_shop_bill_month where shopid=%s and accDate=%s;';
-    this.queryShopBillsMonthSql =
+    this.queryShopBillMonthByShopIdSql =
+      'select accdate as accDate, rn as rn, l1 as l1, fshopid as fShopId, shopid as shopId, shopname2 as shopName2, shopname as shopName, transcnt as transCnt, drmant as drAmt, cramt as crAmt from t_shop_bill_month where shopid=%s;';
+    this.queryShopBillMonthByAccDateSql =
       'select accdate as accDate, rn as rn, l1 as l1, fshopid as fShopId, shopid as shopId, shopname2 as shopName2, shopname as shopName, transcnt as transCnt, drmant as drAmt, cramt as crAmt from t_shop_bill_month where accDate=%s;';
+    this.queryShopBillMonthByShopIdAndAccDateSql =
+      'select accdate as accDate, rn as rn, l1 as l1, fshopid as fShopId, shopid as shopId, shopname2 as shopName2, shopname as shopName, transcnt as transCnt, drmant as drAmt, cramt as crAmt from t_shop_bill_month where shopid=%s and accDate=%s;';
     this.queryShopBillsMonthByFShopIdSql =
+      'select accdate as accDate, rn as rn, l1 as l1, fshopid as fShopId, shopid as shopId, shopname2 as shopName2, shopname as shopName, transcnt as transCnt, drmant as drAmt, cramt as crAmt from t_shop_bill_month where fshopid=%s;';
+    this.queryShopBillsMonthByAccDateSql =
+      'select accdate as accDate, rn as rn, l1 as l1, fshopid as fShopId, shopid as shopId, shopname2 as shopName2, shopname as shopName, transcnt as transCnt, drmant as drAmt, cramt as crAmt from t_shop_bill_month where accDate=%s;';
+    this.queryShopBillsMonthByFShopIdAndAccDateSql =
       'select accdate as accDate, rn as rn, l1 as l1, fshopid as fShopId, shopid as shopId, shopname2 as shopName2, shopname as shopName, transcnt as transCnt, drmant as drAmt, cramt as crAmt from t_shop_bill_month where fshopid=%s and accDate=%s;';
     this.queryOperatorBillsByAccDateSql =
       'select primarykey as primaryKey, accdate as accDate, opercode as operCode, opername as operName, subjno as subjNo, subjname as subjName, transtype as transType, summary as summary, transcnt as transCnt, inamt as inAmt, outamt as outAmt from t_operator_bill where accDate=%s;';
@@ -366,49 +372,59 @@ class YktManager {
   }
   getShopBillMonth(shopId, accDate) {
     return new Promise((resolve, reject) => {
-      const queryShopBillMonthSqlBuild = util.format(
-        this.queryShopBillMonthSql,
-        mysql.escape(shopId),
-        mysql.escape(accDate)
-      );
-      info(`getShopBill: Executing ${queryShopBillMonthSqlBuild}\n`);
-      this.pool.query(queryShopBillMonthSqlBuild, (err, rows) => {
+      let querySql = '';
+      if (shopId && accDate) {
+        querySql = util.format(
+          this.queryShopBillMonthByShopIdAndAccDateSql,
+          mysql.escape(shopId),
+          mysql.escape(accDate)
+        );
+      } else if (shopId) {
+        querySql = util.format(this.queryShopBillMonthByShopIdSql, mysql.escape(shopId));
+      } else if (accDate) {
+        querySql = util.format(this.queryShopBillMonthByAccDateSql, mysql.escape(accDate));
+      } else {
+        error(`getShopBillMonth passed error shopId: ${shopId}, accDate: ${accDate}`);
+        reject(new Error(`getShopBillMonth passed error shopId: ${shopId}, accDate: ${accDate}`));
+        return;
+      }
+      info(`getShopBill: Executing ${querySql}\n`);
+      this.pool.query(querySql, (err, rows) => {
         if (err) {
-          error(`Error executing ${queryShopBillMonthSqlBuild}, with error ${err.stack}\n`);
+          error(`Error executing ${querySql}, with error ${err.stack}\n`);
           reject(err);
           return;
         }
         if (rows.length === 0) {
-          info(`Executing ${queryShopBillMonthSqlBuild} return empty result\n`);
+          info(`Executing ${querySql} return empty result\n`);
           resolve(null);
           return;
         }
-        const shopBill = {
-          shopId: rows[0].shopId,
-          shopName: rows[0].shopName,
-          accDate: rows[0].accDate,
-          transCnt: rows[0].transCnt,
-          drAmt: rows[0].drAmt,
-          crAmt: rows[0].crAmt,
-          rn: rows[0].rn,
-          l1: rows[0].l1,
-          fShopId: rows[0].fShopId,
-          shopName2: rows[0].shopName2,
-        };
-        resolve(shopBill);
+        resolve(rows);
       });
     });
   }
   getShopBillsMonth(fShopId, accDate) {
     // 如果fShopId为null或undefined则全部获取
     return new Promise((resolve, reject) => {
-      const querySql = fShopId
-        ? util.format(
-            this.queryShopBillsMonthByFShopIdSql,
-            mysql.escape(fShopId),
-            mysql.escape(accDate)
-          )
-        : util.format(this.queryShopBillsMonthSql, mysql.escape(accDate));
+      let querySql = '';
+      if (fShopId && accDate) {
+        querySql = util.format(
+          this.queryShopBillsMonthByFShopIdAndAccDateSql,
+          mysql.escape(fShopId),
+          mysql.escape(accDate)
+        );
+      } else if (fShopId) {
+        querySql = util.format(this.queryShopBillsMonthByFShopIdSql, mysql.escape(fShopId));
+      } else if (accDate) {
+        querySql = util.format(this.queryShopBillsMonthByAccDateSql, mysql.escape(accDate));
+      } else {
+        error(`getShopBillsMonth passed error fShopId: ${fShopId}, accDate: ${accDate}`);
+        reject(
+          new Error(`getShopBillsMonth passed error fShopId: ${fShopId}, accDate: ${accDate}`)
+        );
+        return;
+      }
       info(`getDevices: Executing ${querySql}\n`);
       this.pool.query(querySql, (err, rows) => {
         if (err) {
@@ -416,7 +432,7 @@ class YktManager {
           reject(err);
           return;
         }
-        if (rows.length == 0) {
+        if (rows.length === 0) {
           info(`Executing ${querySql} return empty result\n`);
           resolve(null);
           return;
