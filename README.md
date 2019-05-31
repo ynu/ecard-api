@@ -1,4 +1,3 @@
 # ecard-api
 
-一卡通系统数据API。
-文档已[转移](docs/README.md)
+This repo is deprecated, use https://github.com/ynu/ynu-ecard-api/ instead.
